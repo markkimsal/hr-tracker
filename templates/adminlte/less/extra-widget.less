@@ -1,0 +1,22 @@
+.widget-box {
+ &:extend(.box);
+}
+.widget-box .widget-header {
+ &:extend(.box .box-header, .box .box-header:after);
+}
+.widget-box .widget-header h4 ,
+.widget-box .widget-header h5 {
+ &:extend(.box .box-header .box-title);
+}
+.widget-box .widget-body {
+ &:extend(.box .box-body);
+}
+
+.box .widget-header {
+ &:extend(.box .box-header, .box .box-header:after);
+}
+
+.box .table-header h4 {
+ &:extend(.box .box-header .box-title);
+}
+
