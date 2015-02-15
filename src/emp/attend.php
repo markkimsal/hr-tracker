@@ -37,7 +37,7 @@ class Emp_Attend {
 		$t['url'] = m_appurl('cportal/ticket/edit', array('id'=>$att->get('csrv_ticket_id')));
 		$this->presenter = 'redirect';
 		$u = $req->getUser();
-		$u->addSessionMessage('Issue approved.');
+		$response->addUserMessage('Issue approved.');
 		return;
 	}
 
@@ -88,7 +88,7 @@ class Emp_Attend {
 
 		//check time permissions
 		if (!$this->_allowableDateRange($request->cleanString('wpi_date'), $u)) {
-			$u->addSessionMessage('Incident date too far in the past or unable to read date.', 'msg_warn');
+			$response->addUserMessage('Incident date too far in the past or unable to read date.', 'msg_warn');
 			$response->redir = m_appurl('emp/main/view', array('emp_id'=>$cpempid));
 			return;
 		}
@@ -99,7 +99,7 @@ class Emp_Attend {
 			//error
 			$response->redir = m_appurl('emp/main/view', array('emp_id'=>$cpempid));
 			$u = $request->getUser();
-			$u->addSessionMessage('Form is missing required fields.', 'msg_warn');
+			$response->addUserMessage('Form is missing required fields.', 'msg_warn');
 			return;
 		}
 
@@ -164,7 +164,7 @@ class Emp_Attend {
 		$values['att_action'] = $values['corr_act'];
 
 		if (!$this->_allowableDateRange($request->cleanString('att_date'), $u)) {
-			$u->addSessionMessage('Incident date too far in the past or unable to read date.', 'msg_warn');
+			$response->addUserMessage('Incident date too far in the past or unable to read date.', 'msg_warn');
 			$this->presenter = 'redirect';
 			$response->redir = m_appurl('emp/main/view', array('emp_id'=>$empid));
 			return;
@@ -173,12 +173,11 @@ class Emp_Attend {
 
 		$form = $this->_loadAttendanceForm();
 		if (!$form->validate($values)) {
-die('error');
 			//error
 			$response->redir = m_appurl('emp/main/view', array('emp_id'=>$empid));
 			$this->presenter = 'redirect';
 			$u = $request->getUser();
-			//$u->addSessionMessage('Form is missing required fields.', 'msg_warn');
+			//$response->addUserMessage('Form is missing required fields.', 'msg_warn');
 			return;
 		}
 		$ticket->setStage($data);
@@ -199,7 +198,7 @@ die('error');
 		$this->presenter = 'redirect';
 
 		$u = $request->getUser();
-		//$u->addSessionMessage('Incident saved.');
+		//$response->addUserMessage('Incident saved.');
 	}
 
 
@@ -208,24 +207,30 @@ die('error');
 	 * Auto-generate a form using the form library
 	 */
 	public function _loadIncidentForm($values=array(), $edit=false) {
+		$form = 'metroform/form.php';
+		$file = 'emp/form.php';
 		$container = Metrodi_Container::getContainer();
-		$container->tryFileLoading('cpemp/lib/Cpemp_Form.php');
+		$container->tryFileLoading($file);
+		$container->tryFileLoading($form);
+
 
 		$corrective = _get('corrective.wpi');
-		return Cpemp_Form::loadIncidentForm('wpi', $values, $edit, $corrective);
+		return Emp_Form::loadIncidentForm('wpi', $values, $edit, $corrective);
 	}
 
 	/**
 	 * Auto-generate a form using the form library
 	 */
 	public function _loadAttendanceForm($values=array(), $edit=false) {
+		$form = 'metroform/form.php';
+		$file = 'emp/form.php';
 		$container = Metrodi_Container::getContainer();
-		$container->tryFileLoading('cpemp/lib/Cpemp_Form.php');
-
+		$container->tryFileLoading($file);
+		$container->tryFileLoading($form);
 
 		$corrective          = _get('corrective.att');
 		$attendanceTypeList  = _get('attendance');
-		return Cpemp_Form::loadAttendanceForm('attend', $values, $edit, $corrective, $attendanceTypeList);
+		return Emp_Form::loadAttendanceForm('attend', $values, $edit, $corrective, $attendanceTypeList);
 	}
 
 

@@ -16,9 +16,9 @@ class Emp_Main {
 		_didef('wpi_model', 'emp/wpimodel.php');
 		_didef('safety_model', 'emp/safetymodel.php');
 
-		$widget   = 'metrolib/widget.php';
-		$mvc      =  'cpemp/lib/lib_cgn_mvc.php';
-		$mvctable =  'cpemp/lib/lib_cgn_mvc_table.php';
+		$widget   =  'cgn/widget.php';
+		$mvc      =  'cgn/mvc.php';
+		$mvctable =  'cgn/mvc_table.php';
 		$container = Metrodi_Container::getContainer();
 		$container->tryFileLoading($widget);
 		$container->tryFileLoading($mvc);
@@ -409,45 +409,43 @@ class Emp_Main {
 	 * Auto-generate a form using the form library
 	 */
 	public function _loadIncidentForm($formid, $values=array(), $edit=false) {
-//		$a = Nofw_Associate::getAssociate();
-//		$a->load('cpemp/lib/Cpemp_Form.php');
-		$file = 'cpemp/lib/Cpemp_Form.php';
+		$form = 'metroform/form.php';
+		$file = 'emp/form.php';
 		$container = Metrodi_Container::getContainer();
 		$container->tryFileLoading($file);
+		$container->tryFileLoading($form);
 
 		$corrective = _get('corrective.wpi');
-		return Cpemp_Form::loadIncidentForm($formid, $values, $edit, $corrective);
+		return Emp_Form::loadIncidentForm($formid, $values, $edit, $corrective);
 	}
 
 	/**
 	 * Auto-generate a form using the form library
 	 */
 	public function _loadSafetyForm($formid, $values=array(), $edit=false) {
-		//Cgn::loadModLibrary('Cpemp::Cpemp_Form');
-		//$a = Nofw_Associate::getAssociate();
-		//$a->load('cpemp/lib/Cpemp_Form.php');
-		$file = 'cpemp/lib/Cpemp_Form.php';
+		$form = 'metroform/form.php';
+		$file = 'emp/form.php';
 		$container = Metrodi_Container::getContainer();
 		$container->tryFileLoading($file);
+		$container->tryFileLoading($form);
 
 		$training = _get('training');
-		return Cpemp_Form::loadSafetyForm($formid, $values, $edit, $training);
+		return Emp_Form::loadSafetyForm($formid, $values, $edit, $training);
 	}
 
 	/**
 	 * Auto-generate a form using the form library
 	 */
 	public function _loadAttendanceForm($formid, $values=array(), $edit=false) {
-		//Cgn::loadModLibrary('Cpemp::Cpemp_Form');
-		//$a = Nofw_Associate::getAssociate();
-		//$a->load('cpemp/lib/Cpemp_Form.php');
-		$file = 'cpemp/lib/Cpemp_Form.php';
+		$form = 'metroform/form.php';
+		$file = 'emp/form.php';
 		$container = Metrodi_Container::getContainer();
+		$container->tryFileLoading($form);
 		$container->tryFileLoading($file);
 
 		$corrective          = _get('corrective.att');
 		$attendanceTypeList  = _get('attendance');
-		return Cpemp_Form::loadAttendanceForm($formid, $values, $edit, $corrective, $attendanceTypeList);
+		return Emp_Form::loadAttendanceForm($formid, $values, $edit, $corrective, $attendanceTypeList);
 	}
 
 
