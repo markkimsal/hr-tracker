@@ -10,3 +10,4 @@ var/cache/*
 **/local.ini
 node_modules
 /nbproject/private/
+/templates/adminlte/css/*
