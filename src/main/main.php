@@ -1,7 +1,5 @@
 <?php
 
-//class Cgn_Service_Main_Main extends Cgn_Service_Cportal_Main { }
-
 class Main_Main extends Cportal_Main { }
 class Cportal_Main {
 
@@ -9,7 +7,11 @@ class Cportal_Main {
 	public $usesConfig   = true;
 	public $usesPerms    = true;
 
-	function __construct () {
+	public function output() {
+		_set('page.title', 'Dashboard');
+	}
+
+	public function __construct () {
 	}
 
 	/**
