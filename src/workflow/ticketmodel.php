@@ -4,6 +4,7 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 
 	public $dataItem;
 	public $accountItem;
+	public $stageItem = NULL;
 
 	public $tableName = 'csrv_ticket';
 	public $sharingModeRead = '';
@@ -25,8 +26,22 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 	 * Load any specific "stage" data model
 	 */
 	public function loadStage() {
+		$finder = _makeNew('dataitem', 'csrv_ticket_type');
+		$finder->load( $this->getTypeId() );
+		$nameDi = $finder->get('mod_library');
+		$this->stageItem = _makeNew($nameDi);
+		$this->stageItem->load( 
+			array('csrv_ticket_id'=>$this->dataItem->getPrimaryKey())
+		);
 	}
 
+	public function getStage() {
+		return $this->stageItem;
+	}
+
+	public function setStage($m) {
+		$this->stageItem = $m;
+	}
 
 	public function getModel() {
 		return $this->dataItem;
@@ -97,40 +112,14 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 	 * @static
 	 */
 	public static function ticketFactory($dataItem) {
-		$type = new Workflow_Ticket_Type($dataItem->get('csrv_ticket_type_id'));
-		$className = $type->get('class_name');
-		if ($className == '') {
-			$className = 'Workflow_Ticket';
-		}
-
-//		_didef($type->get('mod_library'), $type->get('class_name'));
-//		$ticketObj = _makeNew($type->get('mod_library'));
-
-		$type->loadRequiredClass();
+		$type = new Workflow_Tickettype($dataItem->get('csrv_ticket_type_id'));
+		//$className = $type->get('class_name');
+		$className = 'Workflow_Ticketmodel';
 
 		$ticketObj = new $className();
 		$ticketObj->setModel($dataItem);
 		$ticketObj->loadStage();
 
-		/*
-		switch ($dataItem->csrv_ticket_type_id) {
-			case Workflow_Ticket_Type::$TICK_TYPE_ORDER:
-				Cgn::loadModLibrary('Custserv::Custserv_Order');
-				return Custserv_Order::makeFromTicket($ticketObj);
-				break;
-			case Custserv_Ticket_Type::$TICK_TYPE_RMA:
-				Cgn::loadModLibrary('Custserv::Custserv_Rma');
-				return Custserv_Rma::makeFromTicket($ticketObj);
-				break;
-			case Custserv_Ticket_Type::$TICK_TYPE_QUOTE:
-				Cgn::loadModLibrary('Custserv::Custserv_Quote');
-				return Custserv_Quote::makeFromTicket($ticketObj);
-				break;
-
-			default:
-				return $ticketObj;
-		}
-		 */
 		return $ticketObj;
 	}
 
@@ -188,7 +177,7 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 	public function loadTypeId() {
 		$md = $this->getMetadata();
 		$mdCode = @$md->code;
-		$code = new Workflow_Ticket_Type($mdCode);
+		$code = new Workflow_Tickettype($mdCode);
 		$this->dataItem->csrv_ticket_type_id = $code->get('csrv_ticket_type_id');
 		return $code->get('csrv_ticket_type_id');
 	}
@@ -295,7 +284,7 @@ class  Workflow_Ticket_Status {
 	}
 }
 /*
-class  Workflow_Ticket_Type {
+class  Workflow_Tickettype {
 
 	static $TICK_TYPE_ORDER = 1;
 	static $TICK_TYPE_RMA   = 2;
@@ -307,7 +296,7 @@ class  Workflow_Ticket_Type {
 
 
 	static function getDefaultType() {
-		return Custserv_Ticket_Type::$TICK_TYPE_ORDER;
+		return Custserv_Tickettype::$TICK_TYPE_ORDER;
 	}
 
 	/**
@@ -343,7 +332,7 @@ class  Workflow_Ticket_Type {
 }
 /*
  */
-class Workflow_Ticket_Type extends Metrodb_Datamodel {
+class Workflow_Tickettype extends Metrodb_Datamodel {
 
 	public $tableName  = 'csrv_ticket_type';
 	public $sharingModeRead = '';

@@ -12,7 +12,7 @@ class Cportal_Ticket {
 		_make('dataitem');
 		_didef('datamodel', 'metrodb/datamodel.php');
 		_make('datamodel');
-		include_once('src/cportal/lib/Cportal_Ticket.php');
+//		include_once('src/cportal/lib/Cportal_Ticket.php');
 
 	}
 
@@ -25,7 +25,7 @@ class Cportal_Ticket {
 //		_make('dataitem', 'nothing');
 		_didef('datamodel', 'metrodb/datamodel.php');
 //		_make('datamodel');
-		include_once('src/cportal/lib/Cportal_Ticket.php');
+		include_once('src/workflow/ticketmodel.php');
 
 		_set('page.header', 'Ticket');
 		_set('page.subheader', 'edit');
@@ -82,7 +82,7 @@ class Cportal_Ticket {
 			return false;
 		}
 
-		$this->appendTicketList($request->cleanInt('id'), Cportal_Ticket_Type::getCodeLetter($ticket->csrv_ticket_type_id));
+		$this->appendTicketList($request->cleanInt('id'), Workflow_Tickettype::getCodeLetter($ticket->csrv_ticket_type_id));
 
 		$oldValue = '';
 		if ($ticket->csrv_ticket_status_id == 1) {
@@ -113,7 +113,7 @@ class Cportal_Ticket {
 			$ticket->save();
 		}
 
-		$response->ticketObj = Cportal_Ticket_Model::ticketFactory($ticket);
+		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($ticket);
 
 		$final = _makeNew('dataitem', 'csrv_ticket_status');
 		$final->andWhere('is_terminal', 1);
@@ -123,6 +123,8 @@ class Cportal_Ticket {
 		$comments = _makeNew('dataitem', 'csrv_ticket_comment');
 		$comments->andWhere('csrv_ticket_id', $ticket->csrv_ticket_id);
 		$response->comments = $comments->find();
+
+		_iCanHandle('template.ticket_edit', 'cportal/ticket.php::editView');
 	}
 
 	function viewAction($request, $response) {
@@ -137,22 +139,22 @@ class Cportal_Ticket {
 
 		$response->editMode = FALSE;
 
-		$this->appendTicketList($request->cleanInt('id'), Cportal_Ticket_Type::getCodeLetter($ticket->csrv_ticket_type_id));
+		$this->appendTicketList($request->cleanInt('id'), Workflow_Tickettype::getCodeLetter($ticket->csrv_ticket_type_id));
 
 		$ticket->save();
 
-		$response->ticketObj = Cportal_Ticket_Model::ticketFactory($ticket);
+		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($ticket);
 
-		$type = new Metrodb_Dataitem('csrv_ticket_type');
+		$type = _makeNew('dataitem', 'csrv_ticket_type');
 		$type->_rsltByPkey = TRUE;
 		$response->types = $type->find();
 
-		$status = new Metrodb_Dataitem('csrv_ticket_status');
+		$status = _makeNew('dataitem', 'csrv_ticket_status');
 		$status->_rsltByPkey = TRUE;
 //		$status->andWhere('is_terminal', 0);
 		$response->status = $status->find();
 
-		$comments = new Metrodb_Dataitem('csrv_ticket_comment');
+		$comments = _makeNew('dataitem', 'csrv_ticket_comment');
 		$comments->andWhere('csrv_ticket_id', $ticket->csrv_ticket_id);
 		$response->comments = $comments->find();
 
@@ -161,6 +163,7 @@ class Cportal_Ticket {
 //		$myTemplate->contentTpl = 'ticket_edit';
 		$response->viewonly = true;
 
+		_iCanHandle('template.ticket_edit', 'cportal/ticket.php::editView');
 		self::setupSidebar();
 	}
 
@@ -168,7 +171,7 @@ class Cportal_Ticket {
 		$ticket = new Metrodb_Dataitem('csrv_ticket');
 		$ticket->load($request->cleanInt('id'));
 
-		$response->ticketObj = Cportal_Ticket_Model::ticketFactory($ticket);
+		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($ticket);
 	}
 
 	function breaklockAction($request, $response) {
@@ -854,6 +857,14 @@ return true;
 			return TRUE;
 		}
 		return FALSE;
+	}
+
+	public function editView($response, $response) {
+		ob_start();
+		include ('src/emp/views/ticket_att.html.php');
+		$html = ob_get_contents();
+		ob_end_clean();
+		echo $html;
 	}
 }
 

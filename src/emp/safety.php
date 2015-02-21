@@ -61,7 +61,6 @@ class Emp_Safety {
 	 */
 	public function _loadSafetyForm($values=array(), $edit=false) {
 		include_once('src/cpemp/lib/Cpemp_Form.php');
-	//	Cgn::loadModLibrary('Cpemp::Cpemp_Form');
 		return Cpemp_Form::loadSafetyForm($values, $edit);
 	}
 

@@ -119,12 +119,11 @@ class Cportal_Ticket_Model extends Metrodb_Datamodel {
 		if ($className == '') {
 			$className = 'Cportal_Ticket';
 		}
+		$className = 'Workflow_Ticketmodel';
 
-//		_didef($type->get('mod_library'), $type->get('class_name'));
-//		$ticketObj = _makeNew($type->get('mod_library'));
 
-		$type->loadRequiredClass();
-
+		include_once('src/workflow/ticketmodel.php');
+		//trick to load file containing class
 		$ticketObj = new $className();
 		$ticketObj->setModel($dataItem);
 		$ticketObj->loadStage();
@@ -378,12 +377,6 @@ class Cportal_Ticket_Type extends Metrodb_Datamodel {
 
 	public function initDataItem() {
 		parent::initDataItem();
-		$this->dataItem->_typeMap['mod_library'] = 'string';
-		$this->dataItem->_typeMap['class_name']  = 'string';
-	}
-
-	public function getModLibrary() {
-		return $this->get('mod_library');
 	}
 
 	public function getClassName() {
@@ -398,6 +391,9 @@ class Cportal_Ticket_Type extends Metrodb_Datamodel {
 		return $loader->get('abbrv');
 	}
 
+	/**
+	 * Deprecated
+	 */
 	public function loadRequiredClass() {
 		if ($this->dataItem->get('mod_library') == '') {
 			return FALSE;

@@ -106,7 +106,8 @@ Actions<hr style="margin:0;width:44em;"/>
 <!--
 <div style="background-color:#FCFCF3;margin-top:2em;padding:.5em;padding-left:1em;border:2px;border-left:7px;border-color:#CCC; border-style:solid;">
 -->
-<?php echo $response->ticketObj->getDescription($response); ?>
+<?php Metrofw_Template::parseSection('ticket_edit'); ?>
+<?php // echo $response->ticketObj->getDescription($response); ?>
 </div>
 </div>
 
