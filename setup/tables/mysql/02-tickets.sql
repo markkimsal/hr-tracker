@@ -19,7 +19,7 @@ CREATE TABLE "csrv_ticket" (
   KEY "is_closed_idx" ("is_closed"),
   KEY "csrv_ticket_type_id" ("csrv_ticket_type_id"),
   KEY "csrv_ticket_status_id" ("csrv_ticket_status_id")
-) ENGINE=InnoDB AUTO_INCREMENT=2356 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE "csrv_ticket_type" (
   "csrv_ticket_type_id" int(11) NOT NULL AUTO_INCREMENT,
@@ -32,7 +32,7 @@ CREATE TABLE "csrv_ticket_type" (
   "style_name" char(10) NOT NULL DEFAULT 'primary',
   PRIMARY KEY ("csrv_ticket_type_id"),
   KEY "code_idx" ("code")
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE "csrv_ticket_status" (
   "csrv_ticket_status_id" int(11) NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,7 @@ CREATE TABLE "csrv_ticket_status" (
   KEY "code_idx" ("code"),
   KEY "term_idx" ("is_terminal"),
   KEY "init_idx" ("is_initial")
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE "csrv_ticket_comment" (
   "csrv_ticket_comment_id" int(11) NOT NULL AUTO_INCREMENT,
@@ -61,7 +61,7 @@ CREATE TABLE "csrv_ticket_comment" (
   KEY "created_on_idx" ("created_on"),
   KEY "author_idx" ("author_id"),
   KEY "csrv_ticket_idx" ("csrv_ticket_id")
-) ENGINE=InnoDB AUTO_INCREMENT=964 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE "csrv_ticket_log" (
   "csrv_ticket_log_id" int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -74,5 +74,5 @@ CREATE TABLE "csrv_ticket_log" (
   "attr" varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   "new_value" varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY ("csrv_ticket_log_id")
-) ENGINE=InnoDB AUTO_INCREMENT=9174 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
