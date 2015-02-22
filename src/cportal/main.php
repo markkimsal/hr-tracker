@@ -9,7 +9,10 @@ class Cportal_Main {
 	public $usesConfig   = true;
 	public $usesPerms    = true;
 
-	function __construct () {
+	public function output($request) {
+		if ($request->modName == 'ticket') {
+			_set('page.title', 'Tickets');
+		}
 	}
 
 	/**

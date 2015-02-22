@@ -12,12 +12,6 @@ class Ticket_Main {
 		associate_getMeA('datamodel');
 		include('src/cportal/lib/Cportal_Ticket.php');
 	}
-	function __construct() {
-		/*
-		$name = 'custserv';
-		Cgn_ObjectStore::storeConfig("config://template/default/name", $name);
-		 */
-	}
 
 	/**
 	 * Own the ticket to the current user, if it's not locked and unowned.
@@ -605,6 +599,7 @@ class Ticket_Main {
 	}
 
 	function output($request, $response) {
+		_set('page.title', 'Tickets');
 		header ('Content-Type: text/html');
 		foreach ($response->items as $_cobj) {
 			echo '<li>On '.date('M jS @G:i', $_cobj->created_on).' user <i>'. $_cobj->author.'</i>';

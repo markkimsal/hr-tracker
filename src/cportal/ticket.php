@@ -16,7 +16,7 @@ class Cportal_Ticket {
 
 	}
 
-	function __construct() {
+	public function __construct() {
 		/*
 		$name = 'custserv';
 		Cgn_ObjectStore::storeConfig("config://template/default/name", $name);
@@ -622,10 +622,10 @@ class Cportal_Ticket {
 			$response->items = $items;
 		}
 
-		_iCanOwn('output', 'cportal/ticket.php');
+		_iCanOwn('output', 'cportal/ticket.php::outputLog');
 	}
 
-	function output($request, $response) {
+	function outputLog($request, $response) {
 		header ('Content-Type: text/html');
 		foreach ($response->items as $_cobj) {
 			echo '<li>On '.date('M jS @G:i', $_cobj->created_on).' user <i>'. $_cobj->author.'</i>';
