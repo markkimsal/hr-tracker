@@ -30,6 +30,7 @@ _didef('foobar',         (object)array());
 _didef('form',           'metroform/form.php');
 _didef('Cpemp_Att_Ticket',           'emp/attendancemodel.php');
 
+_didef('ticket_model',   'workflow/ticketmodel.php');
 _didef('employee_model', 'emp/employee.php');
 _didef('attendance_model', 'emp/attendancemodel.php');
 _didef('wpi_model', 'emp/wpimodel.php');

@@ -139,12 +139,12 @@ class Emp_Attend {
 		}
 
 		if ($wpitype == 'W') {
-			$data = _makeNew('wpi_model');
-			$ticket = new Cpemp_Wpi_Ticket();
+			$data   = _makeNew('wpi_model');
+			$ticket = _makeNew('ticket_model');
 		} else {
-			$data = _makeNew('attendance_model');
+			$data   = _makeNew('attendance_model');
 			$data->set('points', $points);
-			$ticket = new Cpemp_Att_Ticket($data);
+			$ticket = _makeNew('ticket_model');
 		}
 
 		$data->set('code', $wpitype);
