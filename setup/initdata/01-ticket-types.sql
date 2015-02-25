@@ -25,7 +25,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `csrv_ticket_type` WRITE;
 /*!40000 ALTER TABLE `csrv_ticket_type` DISABLE KEYS */;
-INSERT INTO `csrv_ticket_type` VALUES (1,'WPI','Work Performance','W','FF3333','emp/wpimodel','Emp_Wpimodel','primary'),(2,'ATT','Attendance','Att','3300FF','emp/attendancemodel','Emp_Attendancemodel','primary'),(3,'WTR','Safety Training','Sft','00CC00','Emp/safetymodel','Emp_Safetymodel','primary');
+INSERT INTO `csrv_ticket_type` VALUES (1,'WPI','Work Performance','W','FF3333','wpi_model','Emp_Wpimodel','primary'),(2,'ATT','Attendance','Att','3300FF','attendance_model','Emp_Attendancemodel','primary'),(3,'WTR','Safety Training','Sft','00CC00','safety_model','Emp_Safetymodel','primary');
 /*!40000 ALTER TABLE `csrv_ticket_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
