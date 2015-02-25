@@ -217,8 +217,7 @@ class Workflow_Ticket_Metadata {
 class  Workflow_Ticket_Status {
 
 	static $STATUS_LIST = NULL;
-
-	static $dataFinder = NULL;
+	static $dataFinder  = NULL;
 
 	static function setDataFinder($df) {
 		Workflow_Ticket_Status::$dataFinder = $df;
@@ -284,55 +283,8 @@ class  Workflow_Ticket_Status {
 		Workflow_Ticket_Status::$STATUS_LIST = NULL;
 	}
 }
-/*
-class  Workflow_Tickettype {
-
-	static $TICK_TYPE_ORDER = 1;
-	static $TICK_TYPE_RMA   = 2;
-	static $TICK_TYPE_QUOTE = 3;
-
-	static $TICK_ABBRV_ORDER = 'O';
-	static $TICK_ABBRV_RMA   = 'R';
-	static $TICK_ABBRV_QUOTE = 'Q';
 
 
-	static function getDefaultType() {
-		return Custserv_Tickettype::$TICK_TYPE_ORDER;
-	}
-
-	/**
-	 * Return true if the ticket is an order type
-	 *
-	 * @param $ticket Object the ticket in question
-	 * @bool 	true if the ticket is an order type
-	// * /
-	static function isTicketOrder($ticket) {
-		if ($ticket->getTypeId() == self::$TICK_TYPE_ORDER) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Return a code letter for a particular type ID
-	*/ 
-/*
-	static function getCodeLetter($typeId) {
-		switch($typeId) {
-			case self::$TICK_TYPE_ORDER:
-			return self::$TICK_ABBRV_ORDER;
-
-			case self::$TICK_TYPE_RMA:
-			return self::$TICK_ABBRV_RMA;
-
-			case self::$TICK_TYPE_QUOTE:
-			return self::$TICK_ABBRV_QUOTE;
-		}
-		return "N/A";
-	}
-}
-/*
- */
 class Workflow_Tickettype extends Metrodb_Datamodel {
 
 	public $tableName  = 'csrv_ticket_type';
