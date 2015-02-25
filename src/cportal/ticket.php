@@ -484,7 +484,7 @@ class Cportal_Ticket {
 		$response->status = $status->find();
 
 
-		$response->ticketObj = Cportal_Ticket_Model::ticketFactory($ticket);
+		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($ticket);
 //		self::setupSidebar();
 	}
 
@@ -518,7 +518,7 @@ class Cportal_Ticket {
 
 		$ticket->csrv_ticket_type_id = (int)$ticket->csrv_ticket_type_id;
 
-		$statusCode = Cportal_Ticket_Status::getStatusCode($finalStatusId);
+		$statusCode = Workflow_Ticket_Status::getStatusCode($finalStatusId);
 		$signalName = 'csrv_ticket_closed_'.$statusCode;
 
 		/*
@@ -563,7 +563,7 @@ class Cportal_Ticket {
 		$u = $request->getUser();
 		$response->addTo('sparkMsg', 'Ticket Closed: #'.$ticket->csrv_ticket_id);
 
-		$response->redir = m_appurl('cportal/');
+		$response->redir = m_appurl('');
 	}
 
 
