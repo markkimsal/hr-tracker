@@ -176,8 +176,9 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 
 	public function loadTypeId() {
 		$md = $this->getMetadata();
-		$mdCode = @$md->code;
-		$code = new Workflow_Tickettype($mdCode);
+		$className = strtolower(get_class($this->stageItem));
+
+		$code = new Workflow_Tickettype($className);
 		$this->dataItem->csrv_ticket_type_id = $code->get('csrv_ticket_type_id');
 		return $code->get('csrv_ticket_type_id');
 	}
@@ -343,7 +344,7 @@ class Workflow_Tickettype extends Metrodb_Datamodel {
 			$id = (int)$id;
 			$this->load($id);
 		} else if ($id != '') {
-			$this->dataItem->andWhere('code', $id);
+			$this->dataItem->andWhere('LOWER(class_name)', $id);
 			$this->dataItem->loadExisting();
 		}
 	}
