@@ -25,6 +25,25 @@ $statusId = $response->ticketObj->getStatusId();
 </div>
 
 
+
+<?php
+if ($response->viewonly == false) { ?>
+<div class="col-sm-4 pull-left">
+<div style="padding-left:1em;border:0;border-left:7px;border-color:#CCC; border-style:solid; margin-bottom:1em;">
+Actions<hr style="margin:0;width:44em;"/>
+<p>
+	<button class="btn btn-info" data-toggle="modal" data-target="#dialog-addanote" id="link-addanote">Add a Note</button>
+	<button class="btn btn-info" data-toggle="modal" data-target="#dialog-changestatus" id="bootbox-status">Change Status</button>
+	<button class="btn btn-success" data-toggle="modal" data-target="#dialog-finalize" id="bootbox-final">Finalize</button>
+</p>
+</div>
+</div>
+<?php
+}
+?>
+
+
+
 <?php
 
 if ($response->viewonly == false) { ?>
@@ -80,23 +99,6 @@ if ($response->viewonly == false) { ?>
 	}
 	</script>
 
-<!--
-<fieldset style="width:auto;margin-right:1em;"><legend>Actions</legend>
--->
-<div style="padding-left:1em;border:0;border-left:7px;border-color:#CCC; border-style:solid; margin-bottom:1em;">
-Actions<hr style="margin:0;width:44em;"/>
-<p>
-	<button class="btn btn-info" data-toggle="modal" data-target="#dialog-addanote" id="link-addanote">Add a Note</button>
-	<button class="btn btn-info" data-toggle="modal" data-target="#dialog-changestatus" id="bootbox-status">Change Status</button>
-	<button class="btn btn-success" data-toggle="modal" data-target="#dialog-finalize" id="bootbox-final">Finalize</button>
-</p>
-
-
-
-</div>
-<!--
-</fieldset>
--->
 <?php
 }
 ?>
