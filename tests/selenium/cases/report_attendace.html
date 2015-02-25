@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="http://192.168.2.77/~mark/amcane/" />
+<link rel="selenium.base" href="http://pbo.dev.local/" />
 <title>report_attendance</title>
 </head>
 <body>
@@ -14,11 +14,6 @@
 <tr>
 	<td>open</td>
 	<td>/</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>css=li.active &gt; a &gt; span.menu-text</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,19 +37,19 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
+	<td>waitForVisible</td>
 	<td>id=att_type</td>
 	<td></td>
 </tr>
 <tr>
 	<td>select</td>
 	<td>id=att_type</td>
-	<td>label=Absence</td>
+	<td>label=Absence (unapproved)</td>
 </tr>
 <tr>
 	<td>select</td>
 	<td>id=att_action</td>
-	<td>label=Coaching / Verbal Reminder (4)</td>
+	<td>label=Coaching / Verbal Reminder*</td>
 </tr>
 <tr>
 	<td>type</td>
@@ -74,7 +69,7 @@
 <tr>
 	<td>verifyText</td>
 	<td>//table[@id='table001']/tbody/tr/td[3]</td>
-	<td>Absence</td>
+	<td>Absence*</td>
 </tr>
 <tr>
 	<td>verifyText</td>
