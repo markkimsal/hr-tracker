@@ -11,3 +11,4 @@ var/cache/*
 node_modules
 /nbproject/private/
 /templates/adminlte/css/*
+/templates/*/components/
