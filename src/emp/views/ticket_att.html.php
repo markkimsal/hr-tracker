@@ -232,7 +232,7 @@ dojo.require("dijit.InlineEditBox");
 </script>
 <?php } ?>
 
-<input type="hidden" name="csrv_ticket_id" id="csrv_ticket_id" value="<?php echo $attItem->getPrimaryKey(); ?>" />
+<input type="hidden" name="details_obj_id" id="details_obj_id" value="<?php echo $response->ticketObj->getPrimaryKey(); ?>" />
 
 
 <div class="_att_edit_block">
@@ -251,16 +251,14 @@ dojo.require("dijit.InlineEditBox");
 
 <div class="_att_edit_block">
 	<h3>Incident Date</h3>
-	<div id="ieidate">
-	<?php echo $fdate;?>
-	</div>
+	<div id="ieidate" class="iedit_date" data-updateaction="emp/attend/updateDate" data-date="<?php echo $fdate;?>" data-property="code"><?php echo $fdate;?></div>
 	<br style="clear:both;"/>
 </div>
 
 <div class="_att_edit_block">
 	<h3>Incident Type</h3>
 	<p>
-	<div id="ieitype" data-updateaction="attend/updateType" data-property="code" data-bind="jeditable:typeName, jeditableOptions: {loadurl: '<?php echo m_appurl('attendance/main/listTypes');?>', type:'select' }"> <?php echo '('.$attItem->get('code').') '.$attItem->getTypeName();?> </div>
+	<div id="ieitype" class="iedit_select" data-updateaction="emp/attend/updateType" data-property="code" data-bind="jeditable:typeName, jeditableOptions: {loadurl: '<?php echo m_appurl('attendance/main/listTypes');?>', type:'select' }"> <?php echo '('.$attItem->get('code').') '.$attItem->getTypeName();?> </div>
 
 	</p>
 	<br style="clear:both;"/>
@@ -272,7 +270,7 @@ dojo.require("dijit.InlineEditBox");
 	<h3>Points</h3>
 	<p>
 
-	<div id="ieipoint" data-propdesc="Points" data-updateaction="attend/updatePoints" data-property="points" data-bind="jeditable:incidentPoints, jeditableOptions: {onblur:'cancel'}">
+	<div id="ieipoint" data-propdesc="Points" data-updateaction="emp/attend/updatePoints" data-property="points" data-bind="jeditable:incidentPoints, jeditableOptions: {onblur:'cancel'}">
 		<?php echo $attItem->get('points');?>
     </div>
 	</p>
@@ -292,7 +290,7 @@ dojo.require("dijit.InlineEditBox");
 <div class="_att_edit_block">
 	<h3>Vacation Hours</h3>
 	<p>
-	<div id="ieihr" data-propdesc="Vacation Hours" data-updateaction="attend/updateField" data-property="vac_hr" data-bind="jeditable:vacHours, jeditableOptions: {onblur:'cancel'}">
+	<div id="ieihr" data-propdesc="Vacation Hours" data-updateaction="emp/attend/updateField" data-property="vac_hr" data-bind="jeditable:vacHours, jeditableOptions: {onblur:'cancel'}">
 	<?php echo $attItem->get('vac_hr') ? $attItem->get('vac_hr'): 'none';?>
 	</div>
 	</p>
@@ -302,7 +300,7 @@ dojo.require("dijit.InlineEditBox");
 <br style="clear:both;"/>
 
 <h3>Description</h3>
-<div id="ieidesc" data-propdesc="Description" data-updateaction="attend/updateDesc" data-property="description" data-bind="jeditable:description, jeditableOptions: {submit:'OK', cancel:'Cancel', onblur:'cancel'}">
+<div id="ieidesc" data-propdesc="Description" data-updateaction="emp/attend/updateDesc" data-property="description" data-bind="jeditable:description, jeditableOptions: {submit:'OK', cancel:'Cancel', onblur:'cancel'}">
 <p>
 <?php echo nl2br($attItem->get('description')); ?>
 </p>

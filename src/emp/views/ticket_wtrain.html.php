@@ -1,5 +1,5 @@
 <?php
-$attItem = $this->stageItem;
+$attItem = $response->ticketObj->stageItem;
 if ($attItem === NULL || $attItem->dataItem->_isNew) {
 	echo "This item has been deleted.";
 	return;
@@ -28,6 +28,7 @@ $fdate = $idate[1].'/'.$idate[2].'/'.$idate[0];
 
 
 
+<input type="hidden" name="details_obj_id" id="details_obj_id" value="<?php echo $response->ticketObj->getPrimaryKey(); ?>" />
 <div class="_att_edit_block">
 	<h3>Employee</h3>
 	<p>

@@ -9,8 +9,6 @@ class Emp_Attend {
 	 * @param type $response
 	 */
 	public function authorize($request, $response) {
-		
-		
 	}
 	
 	public $requireLogin = true;
@@ -23,6 +21,33 @@ class Emp_Attend {
 	public function resources() {
 		$this->loadConfig();
 	}
+
+    /**
+     * Return true of the user has access to the permission
+     *
+     * Returns false if no permission or domain has been defined
+     * @return Boolean  true if the user has permission
+     */
+    public function hasPermission($u, $domain, $perm) { 
+		$this->loadConfig();
+        if ($perm == '' || $domain == '') { 
+            return FALSE;
+        } 
+
+		$perms = _get('perm.'.$domain);
+        if ($perms !== NULL && 
+            isset($perms[$perm]) ) { 
+            $groups = explode(',', $perms[$perm]);
+            foreach ($groups as $_g) { 
+                if ($u->belongsToGroup($_g) ) { 
+                    return TRUE;
+                } 
+            } 
+            return FALSE;
+        } 
+        return FALSE;
+    } 
+
 
 	/**
 	 *
@@ -290,18 +315,17 @@ class Emp_Attend {
 		}
 	}
 
-
-	public function updateTypeAction($req, &$t) {
-		$u = $req->getUser();
+	public function updateTypeAction($request, $response) {
+		$u = $request->getUser();
 
 		$allowed = FALSE;
 
-		$ticketId = $req->cleanInt('csrv_ticket_id');
-		$attType  = $req->cleanString('newvalue');
+		$ticketId = $request->cleanInt('csrv_ticket_id');
+		$attType  = $request->cleanString('newvalue');
 		$ticket = new Cportal_Ticket_Model();
 		if (!$ticket->load($ticketId)) {
-			$t->result = 'error';
-			$t->error_code = 401;
+			$response->result = 'error';
+			$response->error_code = 401;
 			return;
 		}
 		$attend  = Cportal_Ticket_Model::ticketFactory($ticket);
@@ -310,38 +334,45 @@ class Emp_Attend {
 		$attend->stageItem->save();
 
 		$this->_logTicketChange($ticketId, $u->userId, "type", $oldType, $attType, $u->username);
-		$t->result = 'ok';
+		$response->result = 'ok';
 	}
 
-	public function updateDateEvent($req, &$t) {
-		$u = $req->getUser();
+	public function updateDateAction($request, $response) {
+		$u = $request->getUser();
 
 		$allowed = FALSE;
-		if (!$this->hasPermission($u, $this->serviceName, 'updateDate')) {
-			$t['result'] = 'disallowed';
+		if (!$this->hasPermission($u, 'attend', 'updateDate')) {
+			$response->result = 'disallowed';
+			$response->statusCode = 401;
 			return;
 		}
 
-		$ticketId = $req->cleanInt('csrv_ticket_id');
-		if (strtotime($req->cleanString('date')) === FALSE) {
-			$t['badDate'] = $req->cleanString('date');
-			$t['result'] = 'bad';
+		$ticketId = $request->cleanInt('pk');
+		if (strtotime($request->cleanString('value')) === FALSE) {
+			$response->badDate = $request->cleanString('value');
+			$response->result = 'bad';
+			$response->statusCode = 400;
 			return;
 		}
 
-		$attType  = gmdate('Y-m-d', strtotime($req->cleanString('date')));
-		$ticket = new Cportal_Ticket();
+		$attType  = gmdate('Y-m-d', strtotime($request->cleanString('value')));
+//		$ticket = new Cportal_Ticket();
+//		$ticket = new Workflow_Ticketmodel();
+		$ticket = _make('ticket_model');
 		if (!$ticket->load($ticketId)) {
-			$t['result'] = 'disallowed';
+			$response->result = 'disallowed';
+			$response->statusCode = 401;
 			return;
 		}
-		$attend  = Cportal_Ticket::ticketFactory($ticket);
-		$oldType = $attend->stageItem->get('incident_date');
-		$attend->stageItem->set('incident_date', $attType);
-		$attend->stageItem->save();
+
+		$ticket->loadStage();
+		$oldType = $ticket->stageItem->get('incident_date');
+		$ticket->stageItem->set('incident_date', $attType);
+		$ticket->stageItem->save();
+
 
 		$this->_logTicketChange($ticketId, $u->userId, "incident date", $oldType, $attType, $u->username);
-		$t['result'] = 'good';
+		$response->result = 'good';
 	}
 
 	/**
@@ -470,7 +501,11 @@ class Emp_Attend {
 		}
 		foreach ($cfg as $_k => $_v) {
 			if (substr($_k, 0, 7) == 'config.') {
-				associate_set(substr($_k, 7), $_v);
+				_set(substr($_k, 7), $_v);
+			}
+
+			if (strstr($_k,'perm.') ) { 
+				_set($_k, $_v);
 			}
 		}
 	}

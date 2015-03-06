@@ -1,5 +1,5 @@
 <?php
-$attItem = $this->stageItem;
+$attItem = $response->ticketObj->stageItem;
 if ($attItem === NULL || $attItem->dataItem->_isNew) {
 	echo "This item has been deleted.";
 	return;
@@ -159,7 +159,7 @@ dojo.require("dijit.InlineEditBox");
 -->
 </script>
 
-<input type="hidden" name="csrv_ticket_id" id="csrv_ticket_id" value="<?php echo $this->getPrimaryKey(); ?>" />
+<input type="hidden" name="details_obj_id" id="details_obj_id" value="<?php echo $response->ticketObj->getPrimaryKey(); ?>" />
 
 <div class="_att_edit_block">
 	<h3>Employee</h3>
@@ -180,7 +180,7 @@ dojo.require("dijit.InlineEditBox");
 <div class="_att_edit_block">
 	<h3>Incident Date</h3>
 
-	<div id="ieidate">
+	<div id="ieidate" class="iedit_date">
 	<?php echo $fdate;?>
 	</div>
 	<br style="clear:both;"/>
