@@ -6,24 +6,10 @@
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-        <!-- Ionicons -->
-<!--
-        <link href="//code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css" rel="stylesheet" type="text/css" />
--->
-        <!-- Date Picker -->
-<!--
-        <link href="<?php echo m_turl();?>css/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
--->
-        <!-- Daterange picker -->
-<!--
-        <link href="<?php echo m_turl();?>css/daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
--->
-        <!-- bootstrap wysihtml5 - text editor -->
-<!--
-        <link href="<?php echo m_turl();?>css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
--->
         <!-- Theme style -->
         <link href="<?php echo m_turl();?>css/adminlte.css" rel="stylesheet" type="text/css" />
+        <!-- inline editing -->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -267,43 +253,16 @@ $user = $request->getUser();
         </div><!-- ./wrapper -->
 
 
-		<!-- build:js js/built/app.js -->
+        <!-- build:js js/built/app.js -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
-		<!-- endbuild -->
+        <!-- endbuild -->
 
-		<!-- build:js js/built/ticket.js -->
-        <script src="<?php echo m_turl();?>components/jeditable/js/jquery.jeditable.js" type="text/javascript"></script>
-        <script src="<?php echo m_turl();?>components/jeditable/js/date.js" type="text/javascript"></script>
-<!--
-        <script src="<?php echo m_turl();?>components/jeditable/js/jquery.datePicker.js" type="text/javascript"></script>
--->
-        <script src="<?php echo m_turl();?>components/bootstrap-datepicker-eyecon/js/bootstrap-datepicker.js" type="text/javascript"></script>
-<!--
-        <script src="<?php echo m_turl();?>components/jeditable/js/jquery.jeditable.inputs.js" type="text/javascript"></script>
--->
-        <script src="<?php echo m_turl();?>components/jeditable/contributed/jquery.jeditable.datepicker.js" type="text/javascript"></script>
+        <!-- build:js js/built/ticket.js -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>
         <script src="<?php echo m_turl();?>js/app/ticket.js" type="text/javascript"></script>
-		<!-- endbuild -->
-
-        <!-- jQuery Knob Chart -->
-<!--
-        <script src="<?php echo m_turl();?>js/plugins/jqueryKnob/jquery.knob.js" type="text/javascript"></script>
--->
-        <!-- daterangepicker -->
-<!--
-        <script src="<?php echo m_turl();?>js/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
--->
-        <!-- datepicker -->
-        <!-- Bootstrap WYSIHTML5 -->
-<!--
-        <script src="<?php echo m_turl();?>js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
--->
-        <!-- iCheck -->
-<!--
-        <script src="<?php echo m_turl();?>js/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
--->
+        <!-- endbuild -->
 
         <!-- AdminLTE App -->
         <script src="<?php echo m_turl();?>js/AdminLTE/app.js" type="text/javascript"></script>

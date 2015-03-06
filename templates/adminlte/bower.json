@@ -1,0 +1,17 @@
+{
+  "name": "hr-tracker-template",
+  "authors": [
+    "Mark Kimsal <metrofindings@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "DataTables": "~1.10.0",
+    "Datatables-Bootstrap3": "https://github.com/Jowin/Datatables-Bootstrap3.git",
+    "font-awesome": "~4.3.0",
+    "zepto.js": "~1.1.6",
+    "requirejs": "~2.1.16",
+    "bootstrap-datepicker-eyecon": "~1.0.0",
+    "eonasdan-bootstrap-datetimepicker": "~4.0.0"
+  }
+}
