@@ -1,7 +1,9 @@
 
+<!--
 <script src="<?=m_turl();?>scripts/bootbox.min.js"></script>
 <script src="<?=m_url();?>src/cportal/views/jquery.jeditable.js"></script>
 <script src="<?=m_url();?>src/cportal/views/ticket.js"></script>
+-->
 
 <?php
 //var_dump($response->ticketObj);
@@ -10,24 +12,62 @@ $statusId = $response->ticketObj->getStatusId();
 ?>
 
 
+<div class="row">
 <div class="widget-box pull-left">
 <div class="widget-header">
-<h5><i class="icon-pushpin"></i>Ticket Info</h5>
+<h5><i class="fa fa-pushpin"></i>Ticket Info</h5>
 </div>
 <div class="widget-body">
-	<div style="float:left;border:1px solid #CCC;text-align:center;width:9em;"><span style="font-size:90%">Status</span><br/><span style="font-size:100%"><?=str_replace(' ', '&nbsp;', $response->status[$statusId]->display_name);?></span></div>
-	<div style="float:left;border:1px solid #CCC;width:10em;text-align:center;"><span style="font-size:90%">Ticket Type</span><br/><span style="font-size:100%"><?= $response->types[$typeId]->display_name;?></span></div>
-	<div style="float:left;border:1px solid #CCC;width:9em;text-align:center;"><span style="font-size:90%">Received</span><br/> 
-				 <span style="font-size:90%"><?= date('M jS',$response->ticketObj->dataItem->created_on);?></span>
-                  <span style="font-size:100%"><?= date('G:i',$response->ticketObj->dataItem->created_on);?></span></div>
-	<div style="float:left;border:1px solid #CCC;width:6em;text-align:center;"><span style="font-size:90%">No.</span><br/><span style="font-size:100%"><?= $response->ticketObj->getId();?></span></div>
+	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;text-align:center;width:9em;">
+		<h5>Status</h5>
+		<?=str_replace(' ', '&nbsp;', $response->status[$statusId]->display_name);?>
+	</div>
+	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;width:10em;text-align:center;">
+		<h5>Ticket Type</h5>
+		<?= $response->types[$typeId]->display_name;?>
+	</div>
+	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;width:9em;text-align:center;">
+		<h5>Received</h5> 
+		<?= date('M jS',$response->ticketObj->dataItem->created_on);?>
+		<?= date('G:i',$response->ticketObj->dataItem->created_on);?>
+	</div>
+	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;width:6em;text-align:center;">
+		<h5>No.</h5>
+		<?= $response->ticketObj->getId();?>
+	</div>
+
+<?php
+
+if ($response->viewonly == false) { ?>
+<div class="well pull-left">
+	<h5>Ticket is locked <i class="fa fa-lock fa-lg"></i></h5>
+	Done with this ticket? <a href="<?=m_appurl('cportal/ticket/unlock', array('id'=>$response->ticketObj->getId()));?>">Unlock it.</a>
+</div>
+
+<?php
+} else {
+?>
+<div class="well pull-left">
+	<h5>Ticket is unlocked <i class="fa fa-unlock fa-lg"></i></h5>
+	To make changes <a href="<?=m_appurl('cportal/ticket/edit', array('id'=>$response->ticketObj->getId()));?>">lock this ticket.</a>
+</div>
+
+
+<?php
+}
+?>
+
+
+
 </div>
 </div>
+</div> <!-- /.row -->
 
 
 
 <?php
 if ($response->viewonly == false) { ?>
+<div class="row">
 <div class="col-sm-4 pull-left">
 <div style="padding-left:1em;border:0;border-left:7px;border-color:#CCC; border-style:solid; margin-bottom:1em;">
 Actions<hr style="margin:0;width:44em;"/>
@@ -38,39 +78,12 @@ Actions<hr style="margin:0;width:44em;"/>
 </p>
 </div>
 </div>
+</div> <!-- /.row -->
 <?php
 }
 ?>
 
 
-
-<?php
-
-if ($response->viewonly == false) { ?>
-<div class="well pull-right">
-	<h4>Unlock Ticket <i class="icon icon-unlock bigger-130"></i></h4>
-	<div class="box03_content">
-	
-	Done with this ticket? <a href="<?=m_appurl('cportal/ticket/unlock', array('id'=>$response->ticketObj->getId()));?>">Unlock it.</a>
-	</div>
-</div>
-
-<?php
-} else {
-?>
-<div class="well pull-right">
-	<h4>Lock Ticket <i class="fa fa-lock fa-lg"></i></h4>
-	<div class="box03_content">
-	To make changes <a href="<?=m_appurl('cportal/ticket/edit', array('id'=>$response->ticketObj->getId()));?>">lock this ticket.</a>
-	<br/>
-	Go back home. <a href="<?=m_appurl('cportal/main');?>">Cancel.</a>
-	</div>
-</div>
-
-
-<?php
-}
-?>
 
 
 <!-- stupid spacer for CSS -->
@@ -79,12 +92,13 @@ if ($response->viewonly == false) { ?>
 <?php
 if ($response->viewonly == false) { ?>
 	<script language="javascript">
+/*
 	//jquery scrolling in the main template stops basic javasript.
 
 	//basic javascript, no jquery
 	function showAction(item, evt) {
 		var divname = $(evt.target).attr('data-target');
-		if (jQuery(document)) { return false; }
+		if ($(document)) { return false; }
 		document.getElementById('addanote').style.display='none';
 		document.getElementById('finalizenote').style.display='none';
 		document.getElementById('changestatus').style.display='none';
@@ -97,6 +111,7 @@ if ($response->viewonly == false) { ?>
 		document.getElementById('comment_ticket').value = 
 			timestamp + comments + "\n\n" + document.getElementById('comment_ticket').value;
 	}
+*/
 	</script>
 
 <?php
@@ -114,11 +129,13 @@ if ($response->viewonly == false) { ?>
 </div>
 
 <script type="text/javascript">
-jQuery(document).ready(function() {
+/*
+$(document).ready(function() {
 	$("#log-tab-1").bind("click", {t: "both", onSpan: "#log-tab-1", offSpan1: "#log-tab-2", offSpan2: "#log-tab-3"}, doLogUpdate);
 	$("#log-tab-2").bind("click", {t: "comments", onSpan: "#log-tab-2", offSpan1: "#log-tab-1", offSpan2: "#log-tab-3"}, doLogUpdate);
 	$("#log-tab-3").bind("click", {t: "status", onSpan: "#log-tab-3", offSpan1: "#log-tab-1", offSpan2: "#log-tab-2"}, doLogUpdate);
 });
+*/
 
 	function doLogUpdate(evt, typ) {
 			$.ajax({
@@ -284,5 +301,4 @@ padding-bottom: 3px;
 </div>
 </div>
 </div>
-
 
