@@ -378,14 +378,14 @@ class Emp_Attend {
 		}
 
 		$ticketId = $request->cleanInt('pk');
-		if (strtotime($request->cleanString('idate')) === FALSE) {
-			$response->badDate = $request->cleanString('idate');
+		if (strtotime($request->cleanString('value')) === FALSE) {
+			$response->badDate = $request->cleanString('value');
 			$response->result = 'bad';
 			$response->statusCode = 400;
 			return;
 		}
 
-		$attType  = gmdate('Y-m-d', strtotime($request->cleanString('idate')));
+		$attType  = gmdate('Y-m-d', strtotime($request->cleanString('value')));
 //		$ticket = new Cportal_Ticket();
 //		$ticket = new Workflow_Ticketmodel();
 		$ticket = _make('ticket_model');
