@@ -203,7 +203,9 @@ class Cportal_Ticket {
 		}
 
 		$this->unlockTicket($ticket,$u);
-		$response->redir = m_appurl('cportal/ticket/view/id='.$request->cleanInt('id'));
+//		$response->redir = m_appurl('cportal/ticket/view/id='.$request->cleanInt('id'));
+		//to speed up workflow, redirect to dashboard when 'done' with ticket
+		$response->redir = m_appurl();
 	}
 
 	function unlockTicket($ticket, $u) {
