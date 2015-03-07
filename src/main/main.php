@@ -9,6 +9,7 @@ class Cportal_Main {
 
 	public function output() {
 		_set('page.title', 'Dashboard');
+		_set('page.header', 'Dashboard');
 	}
 
 	public function __construct () {
@@ -81,8 +82,6 @@ class Cportal_Main {
 		$response->oldLimit      = $oldLimit;
 
 		//self::setupSidebar();
-
-		_set('page.header', 'Dashboard');
 	}
 
 
