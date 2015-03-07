@@ -108,10 +108,11 @@ class Cportal_Ticket {
 		$final->_rsltByPkey = TRUE;
 		$response->final = $final->find();
 
+/*
 		$comments = _makeNew('dataitem', 'csrv_ticket_comment');
 		$comments->andWhere('csrv_ticket_id', $ticket->csrv_ticket_id);
 		$response->comments = $comments->find();
-
+*/
 		_iCanHandle('template.ticket_edit', 'cportal/ticket.php::editView');
 	}
 
@@ -240,12 +241,12 @@ class Cportal_Ticket {
 			return false;
 		}
 
-		$comment = new Metrodb_Dataitem('csrv_ticket_comment');
-		$comment->message = $request->cleanMultiLine('comment');
+		$comment = _makeNew('dataitem', 'csrv_ticket_comment');
+		$comment->message        = $request->cleanMultiLine('comment');
 		$comment->csrv_ticket_id = $ticket->csrv_ticket_id;
-		$comment->created_on = time();
-		$comment->author_id = $request->getUser()->userId;
-		$comment->author    = $request->getUser()->username;
+		$comment->created_on     = time();
+		$comment->author_id      = $request->getUser()->userId;
+		$comment->author         = $request->getUser()->username;
 		$comment->save();
 
 		$response->addTo('sparkMsg', array('msg'=>'Note added to ticket #'.$ticket->csrv_ticket_id));
@@ -561,30 +562,30 @@ class Cportal_Ticket {
 	 * send XML items down to ajax
 	 */
 	function logAction($request, $response) {
-		$type = new Metrodb_Dataitem('csrv_ticket_type');
-		$response->types = $type->find();
+		$finder = new Metrodb_Dataitem('csrv_ticket_type');
+		$response->types = $finder->find();
 
 		$status = new Metrodb_Dataitem('csrv_ticket_status');
 		$status->andWhere('is_terminal', 0);
-		$status->andWhere('is_initial', 0);
+		$status->andWhere('is_initial',  0);
 		$response->status = $status->find();
 
 
-		$ticket = new Metrodb_Dataitem('csrv_ticket');
-		$ticket->load($req->cleanInt('id'));
+		$ticket = _makeNew('dataitem', 'csrv_ticket');
+		$ticket->load($request->cleanInt('id'));
 		if ($ticket->_isNew) {
-			trigger_error('cannot find ticket id #'.$req->cleanInt('id'));
+			trigger_error('cannot find ticket id #'.$request->cleanInt('id'));
 			return false;
 		}
 
-		$u = $req->getUser();
+		$u = $request->getUser();
 		//$response->ticketObj = Custserv_Ticket::ticketFactory($ticket);
 
-		$type = $req->cleanString(4);
+		$type = $request->cleanString('t');
 		$response->items = array();
 		$itemTimes = array();
 		if ($type == 'comments' || $type == 'both') {
-			$comments = new Metrodb_Dataitem('csrv_ticket_comment');
+			$comments = _makeNew('dataitem', 'csrv_ticket_comment');
 			$comments->andWhere('csrv_ticket_id', $ticket->csrv_ticket_id);
 			$comments->sort('created_on', 'ASC');
 			$logs = $comments->find();

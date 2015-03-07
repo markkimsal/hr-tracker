@@ -7,8 +7,9 @@
 
 <?php
 //var_dump($response->ticketObj);
-$typeId = $response->ticketObj->getTypeId();
+$typeId   = $response->ticketObj->getTypeId();
 $statusId = $response->ticketObj->getStatusId();
+$pkey     = $response->ticketObj->getPrimaryKey();
 ?>
 
 
@@ -181,29 +182,38 @@ padding-bottom: 3px;
 	<div class="tabbable">
 		<ul class="nav nav-tabs padding-12 tab-color-blue background-blue">
 			<li class="active">
-				<a data-toggle="tab" data-bind="click:function (data, evt) {doLogUpdate(evt, 'comments')}" href="#tab-comments">Comments</a>
+				<a data-toggle="tab" id="link-comments" data-source="cportal/ticket/log/id=<?php echo $pkey;?>/t=comments" href="#tab-comments">Comments</a>
 			</li>
 
 			<li class="">
-				<a data-toggle="tab" data-bind="click:function (data, evt) {doLogUpdate(evt, 'status')}" href="#tab-comments">Changes</a>
+				<a data-toggle="tab" id="link-status" data-source="cportal/ticket/log/id=<?php echo $pkey;?>/t=status" href="#tab-status">Changes</a>
 			</li>
 
 			<li class="">
-				<a data-toggle="tab" data-bind="click:function (data, evt) {doLogUpdate(evt, 'both')}" href="#tab-comments">Both</a>
+				<a data-toggle="tab" id="link-all" data-source="cportal/ticket/log/id=<?php echo $pkey;?>/t=both" href="#tab-all">Both</a>
 			</li>
 		</ul>
 
 		<div class="tab-content">
 			<div id="tab-comments" class="tab-pane active">
-		<ol id="ticket-item-log">
+				<ol id="ticket-comments-log">
 <?php foreach ($response->comments as $_cobj): ?>
-			<li>On <?= date('M jS @G:i', $_cobj->created_on);?> user <i><?= $_cobj->author;?></i> wrote:
-			<br/>
-			<?= nl2br($_cobj->message);?>
-			</li>
+<!--
+					<li>On <?= date('M jS @G:i', $_cobj->created_on);?> user <i><?= $_cobj->author;?></i> wrote:
+					<br/>
+					<?= nl2br($_cobj->message);?>
+					</li>
+-->
 <?php endforeach; ?>
-		</ol>
-
+				</ol>
+			</div>
+			<div id="tab-status" class="tab-pane">
+				<ol id="ticket-status-log">
+				</ol>
+			</div>
+			<div id="tab-all" class="tab-pane">
+				<ol id="ticket-all-log">
+				</ol>
 			</div>
 		</div>
 	</div>
