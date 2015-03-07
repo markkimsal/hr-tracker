@@ -86,7 +86,7 @@ Actions<hr style="margin:0;width:44em;"/>
 
 
 <!-- stupid spacer for CSS -->
-<div style="clear:right;border:0;width:100%;"></div>
+<div style="clear:both;border:0;width:100%;"></div>
 
 <?php
 if ($response->viewonly == false) { ?>
@@ -168,14 +168,6 @@ $(document).ready(function() {
 </script>
 
 <p>&nbsp;</p>
-<style type="text/css">
-#ticket-item-log li {
-border-bottom: 1px solid black;
-margin-bottom: 7px;
-padding-bottom: 3px;
-}
-</style>
-
 
 <a name="tab-log"></a>
 <div class="col-sm-12">
