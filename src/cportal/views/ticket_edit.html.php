@@ -10,6 +10,8 @@
 $typeId   = $response->ticketObj->getTypeId();
 $statusId = $response->ticketObj->getStatusId();
 $pkey     = $response->ticketObj->getPrimaryKey();
+
+$editClass = ($response->viewOnly == FALSE) ? 'details_edit' : 'details_view';
 ?>
 
 
@@ -117,7 +119,7 @@ if ($response->viewonly == false) { ?>
 }
 ?>
 
-<div style="background-color:#FCFCE0;margin-top:2em;padding:.5em;border:2px;border-left:2px;border-color:#CCC; border-style:solid;width:98%">
+<div class="<?php echo $editCss;?>" style="background-color:#FCFCE0;margin-top:2em;padding:.5em;border:2px;border-left:2px;border-color:#CCC; border-style:solid;width:98%">
 <div style="background-color:#FFF;padding:.5em;padding-left:1em;">
 <!--
 <div style="background-color:#FCFCF3;margin-top:2em;padding:.5em;padding-left:1em;border:2px;border-left:7px;border-color:#CCC; border-style:solid;">
