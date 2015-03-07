@@ -12,7 +12,6 @@ $statusId = $response->ticketObj->getStatusId();
 ?>
 
 
-<div class="row">
 <div class="widget-box pull-left">
 <div class="widget-header">
 <h5><i class="fa fa-pushpin"></i>Ticket Info</h5>
@@ -61,7 +60,6 @@ if ($response->viewonly == false) { ?>
 
 </div>
 </div>
-</div> <!-- /.row -->
 
 
 
