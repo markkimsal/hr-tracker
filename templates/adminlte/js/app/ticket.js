@@ -24,21 +24,13 @@
  		$(this).editable({
 			type: 'select',
 			url: burl + $(this).data('updateaction'),
-			source: burl + 'emp/attend/listTypes',
+			source: burl + $(this).data('sourceurl'),
 			pk: pk,
 			format: 'mm/dd/yyyy'
 		});
 	});
-
 /*
      $('.iedit_area').each(function(index) {
-         $(this).editable(
-		     burl + $(this).data('updateaction'), {
-             indicator : 'Saving...',
-             tooltip   : 'Click to edit...'
-     })});
-
-     $('.iedit_select').each(function(index) {
          $(this).editable(
 		     burl + $(this).data('updateaction'), {
              indicator : 'Saving...',

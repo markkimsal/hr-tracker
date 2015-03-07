@@ -29,6 +29,7 @@ class Emp_Attend {
      * @return Boolean  true if the user has permission
      */
     public function hasPermission($u, $domain, $perm) { 
+
 		$this->loadConfig();
         if ($perm == '' || $domain == '') { 
             return FALSE;
@@ -42,7 +43,7 @@ class Emp_Attend {
                 if ($u->belongsToGroup($_g) ) { 
                     return TRUE;
                 } 
-            } 
+            }
             return FALSE;
         } 
         return FALSE;
@@ -298,7 +299,8 @@ class Emp_Attend {
 			//for jeditable
 			//$listItems[$_k] = '('.$_k.') '.$_c;
 			//for x-editable
-			$listItems[] = array('text' =>'('.$_k.') '.$_c, 'value'=>'('.$_k.') '.$_c);
+			//$listItems[] = array('text' =>'('.$_k.') '.$_c, 'value'=>'('.$_k.') '.$_c);
+			$listItems[] = array('text' =>'('.$_k.') '.$_c, 'value'=>$_k);
 		}
 		//for jeditable
 		//echo json_encode($listItems);
@@ -312,12 +314,18 @@ class Emp_Attend {
 	/**
 	 * Automatically turn the local.ini/config.ini settings for "config.corrective.att" into JSON data.
 	 */
-	public function listCorrAttEvent($req, &$t) {
-		$t['identifier'] = 'label';
+	public function listCorrAttAction($request, $response) {
+		$this->loadConfig();
+//		$response->identifier = 'label';
 		$corrective = $this->getConfig('corrective.att');
+
 		foreach( $corrective as $_k => $_c) {
-			$t['items'][] = array('label' =>$_c, 'code'=>$_k, 'value'=>$_c);
+			$response->addTo('items', array('text' =>$_c, 'code'=>$_k, 'value'=>$_k));
 		}
+
+		//for x-editable (it cannot support anything more than the data in the response)
+		echo json_encode($response->items);
+		exit();
 	}
 
 	public function updateTypeAction($request, $response) {
@@ -370,14 +378,14 @@ class Emp_Attend {
 		}
 
 		$ticketId = $request->cleanInt('pk');
-		if (strtotime($request->cleanString('value')) === FALSE) {
-			$response->badDate = $request->cleanString('value');
+		if (strtotime($request->cleanString('idate')) === FALSE) {
+			$response->badDate = $request->cleanString('idate');
 			$response->result = 'bad';
 			$response->statusCode = 400;
 			return;
 		}
 
-		$attType  = gmdate('Y-m-d', strtotime($request->cleanString('value')));
+		$attType  = gmdate('Y-m-d', strtotime($request->cleanString('idate')));
 //		$ticket = new Cportal_Ticket();
 //		$ticket = new Workflow_Ticketmodel();
 		$ticket = _make('ticket_model');
@@ -453,28 +461,32 @@ class Emp_Attend {
 	}
 
 
-	public function updateCorrAttEvent($req, &$t) {
-		$u = $req->getUser();
+	public function updateCorrAttAction($request, $response) {
+		$u = $request->getUser();
 
-		if (!$this->hasPermission($u, $this->serviceName, 'updateCorrAtt')) {
-			$t['result'] = 'disallowed';
+		if (!$this->hasPermission($u, 'attend', 'updateCorrAtt')) {
+			$response->result = 'disallowed';
+			$response->statusCode = 401;
 			return;
 		}
 
-		$ticketId   = $req->cleanInt('csrv_ticket_id');
-		$attValue   = $req->cleanString('corr_act');
-		$ticket = new Cportal_Ticket();
+		$ticketId   = $request->cleanInt('pk');
+		$attValue   = $request->cleanString('value');
+		$ticket = _make('ticket_model');
 		if (!$ticket->load($ticketId)) {
-			$t['result'] = 'disallowed';
+			$response->result = 'disallowed';
+			$response->statusCode = 400;
 			return;
 		}
-		$attend    = Cportal_Ticket::ticketFactory($ticket);
-		$oldValue = $attend->stageItem->get('corr_act');
-		$attend->stageItem->set('corr_act', $attValue);
-		$attend->stageItem->save();
+
+		$ticket->loadStage();
+		$oldValue = $ticket->stageItem->get('corr_act');
+		$ticket->stageItem->set('corr_act', $attValue);
+		$ticket->stageItem->save();
 
 		$this->_logTicketChange($ticketId, $u->userId, "Corrective Action", $oldValue, $attValue, $u->username);
-		$t['result'] = 'good';
+		$response->result = 'good';
+		$response->newValue = $attValue;
 	}
 
 	protected function _logTicketChange($ticketId, $userId, $attrName, $oldValue, $newValue, $username='') {
