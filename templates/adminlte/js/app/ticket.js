@@ -29,13 +29,15 @@
 			format: 'mm/dd/yyyy'
 		});
 	});
-/*
-     $('.iedit_area').each(function(index) {
-         $(this).editable(
-		     burl + $(this).data('updateaction'), {
-             indicator : 'Saving...',
-             tooltip   : 'Click to edit...'
-     })});
-*/
+
+	$('.iedit_area').each(function(index) {
+		$(this).editable({
+			type: 'textarea',
+			url: burl + $(this).data('updateaction'),
+			source: burl + $(this).data('sourceurl'),
+			mode: 'inline',
+			pk: pk
+		});
+	});
  });
 }(jQuery));
