@@ -37,7 +37,10 @@ _didef('wpi_model', 'emp/wpimodel.php');
 _didef('safety_model', 'emp/safetymodel.php');
 
 
-
+// signals and slots
+_iCanHandle('workflow.ticket.save.after', 'workflow/luceneindexer.php::index');
+//_iCanHandle('workflow.ticket.save.after', 'workflow/esindexer.php::index');
+//_iCanHandle('workflow.ticket.save.after', 'workflow/solrindexer.php::index');
 
 _didef('loggerService',  (object)array());
 

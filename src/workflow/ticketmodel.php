@@ -82,7 +82,7 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 		Metrofw_Kernel::emit('workflow.ticket.save.after', $this);
 
 		if ($this->useSearch === TRUE) {
-			$this->indexInSearch();
+//			$this->indexInSearch();
 		}
 		$db->exec('COMMIT');
 
