@@ -238,9 +238,9 @@ $user = $request->getUser();
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-<?= Metrofw_Template::parseSection('template.sparkmsg');?>
+<? /* Metrofw_Template::parseSection('sparkmsg'); */?>
 
-<?= Metrofw_Template::parseSection('template.main');?>
+<?= Metrofw_Template::parseSection('main');?>
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
@@ -257,10 +257,7 @@ $user = $request->getUser();
         <script src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js" type="text/javascript"></script>
         <!-- endbuild -->
 
-        <!-- build:js js/built/ticket.js -->
-        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>
-        <script src="<?php echo m_turl();?>js/app/ticket.js" type="text/javascript"></script>
-        <!-- endbuild -->
+		<?= Metrofw_Template::parseSection('pagejs');?>
 
         <!-- AdminLTE App -->
         <script src="<?php echo m_turl();?>js/AdminLTE/app.js" type="text/javascript"></script>

@@ -7,15 +7,6 @@ class Cportal_Ticket {
 	var $rpp          = 200; //records per page
 	var $usesPerms    = TRUE;
 
-	public function resources() {
-		_didef('dataitem', 'metrodb/dataitem.php');
-		_make('dataitem');
-		_didef('datamodel', 'metrodb/datamodel.php');
-		_make('datamodel');
-//		include_once('src/cportal/lib/Cportal_Ticket.php');
-
-	}
-
 	public function __construct() {
 		/*
 		$name = 'custserv';
@@ -26,9 +17,6 @@ class Cportal_Ticket {
 		_didef('datamodel', 'metrodb/datamodel.php');
 //		_make('datamodel');
 		include_once('src/workflow/ticketmodel.php');
-
-		_set('page.header', 'Ticket');
-		_set('page.subheader', 'edit');
 	}
 
 	/**
@@ -215,7 +203,7 @@ class Cportal_Ticket {
 		}
 
 		$this->unlockTicket($ticket,$u);
-		$response->redir = m_appurl('');
+		$response->redir = m_appurl('cportal/ticket/view/id='.$request->cleanInt('id'));
 	}
 
 	function unlockTicket($ticket, $u) {
@@ -623,6 +611,20 @@ class Cportal_Ticket {
 		}
 
 		_iCanOwn('output', 'cportal/ticket.php::outputLog');
+	}
+
+	public function output($request, $response) {
+		_set('page.header',    'Ticket');
+		_set('page.subheader', $request->actName);
+
+		_iCanHandle('template.pagejs', array($this, 'pageJs'));
+	}
+
+	public function pageJs($request, $template_section) {
+		if ($request->actName == 'edit') {
+			echo'<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>';
+			echo'<script src="'.m_turl().'js/app/ticket.js"></script>';
+		}
 	}
 
 	function outputLog($request, $response) {
