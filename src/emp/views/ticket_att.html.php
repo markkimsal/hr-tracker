@@ -258,7 +258,7 @@ dojo.require("dijit.InlineEditBox");
 <div class="_att_edit_block">
 	<h3>Incident Type</h3>
 	<p>
-	<div id="ieitype" class="iedit_select" data-updateaction="emp/attend/updateType" data-property="code" data-bind="jeditable:typeName, jeditableOptions: {loadurl: '<?php echo m_appurl('attendance/main/listTypes');?>', type:'select' }"> <?php echo '('.$attItem->get('code').') '.$attItem->getTypeName();?> </div>
+	<div id="ieitype" class="iedit_select" data-updateaction="emp/attend/updateType" data-property="code" data-bind="jeditable:typeName, jeditableOptions: {loadurl: '<?php echo m_appurl('attendance/main/listTypes');?>', type:'select' }"><?php echo '('.$attItem->get('code').') '.$attItem->getTypeName();?></div>
 
 	</p>
 	<br style="clear:both;"/>

@@ -30,7 +30,8 @@ class Emp_Attendancemodel extends Metrodb_Datamodel {
 		}
 
 		if(! isset( self::$typeList[$act])) {
-			return '('.$this->get('code').') Unknown';
+			return 'Unknown';
+//			return '('.$this->get('code').') Unknown';
 		}
 		return self::$typeList[$act];
 	}
@@ -65,7 +66,7 @@ class Emp_Attendancemodel extends Metrodb_Datamodel {
 	public static function setTypeList($l=NULL) {
 		if (!is_array($l)) {
 			$l = array();
-			$appPath = dirname(dirname(__FILE__));
+			$appPath = dirname(__FILE__);
 			$cfg =  parse_ini_file($appPath.'/config.ini',true);
 			if (@file_exists($appPath.'/local.ini') ) { 
 				$localCfg = parse_ini_file($appPath.'/local.ini',true);

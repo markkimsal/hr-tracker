@@ -4,29 +4,33 @@
 	var pk = $('#details_obj_id').val();
 	$('.iedit_date').each(function(index) {
  		$(this).editable({
-		type: 'date',
-		url: burl + $(this).data('updateaction'),
-		pk: pk,
-		format: 'mm/dd/yyyy'
+			type: 'date',
+			url: burl + $(this).data('updateaction'),
+			pk: pk,
+			format: 'mm/dd/yyyy'
+		});
 	});
-/*
-         $(this).editable(
-		     burl + $(this).data('updateaction'), {
-             type: 'datepicker',
-             indicator : 'Saving...',
-             tooltip   : 'Click to edit...'
-     	})
-*/
+
+	$('.iedit_text').each(function(index) {
+ 		$(this).editable({
+			type: 'text',
+			url: burl + $(this).data('updateaction'),
+			pk: pk,
+			format: 'mm/dd/yyyy'
+		});
+	});
+
+	$('.iedit_select').each(function(index) {
+ 		$(this).editable({
+			type: 'select',
+			url: burl + $(this).data('updateaction'),
+			source: burl + 'emp/attend/listTypes',
+			pk: pk,
+			format: 'mm/dd/yyyy'
+		});
 	});
 
 /*
-     $('.iedit_text').each(function(index) {
-         $(this).editable(
-		     burl + $(this).data('updateaction'), {
-             indicator : 'Saving...',
-             tooltip   : 'Click to edit...'
-     })});
-
      $('.iedit_area').each(function(index) {
          $(this).editable(
 		     burl + $(this).data('updateaction'), {

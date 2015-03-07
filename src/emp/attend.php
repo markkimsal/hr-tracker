@@ -289,19 +289,24 @@ class Emp_Attend {
 	/**
 	 * Automatically turn the local.ini/config.ini settings for "config.attendance" into JSON data.
 	 */
-	public function listTypesAction($req, &$t) {
-		$t->identifier = 'label';
+	public function listTypesAction($request, $response) {
+		$response->identifier = 'label';
 		$corrective = $this->getConfig('attendance');
 		$listItems = array();
 		foreach( $corrective as $_k => $_c) {
 			//$listItems[] = array('label' =>'('.$_k.') '.$_c, 'code'=>$_k, 'value'=>'('.$_k.') '.$_c);
 			//for jeditable
-			$listItems[$_k] = '('.$_k.') '.$_c;
+			//$listItems[$_k] = '('.$_k.') '.$_c;
+			//for x-editable
+			$listItems[] = array('text' =>'('.$_k.') '.$_c, 'value'=>'('.$_k.') '.$_c);
 		}
 		//for jeditable
+		//echo json_encode($listItems);
+
+		//for x-editable (it cannot support anything more than the data in the response)
 		echo json_encode($listItems);
 		exit();
-//		$t->items = $listItems;
+//		$response->items = $listItems;
 	}
 
 	/**
@@ -320,21 +325,38 @@ class Emp_Attend {
 
 		$allowed = FALSE;
 
-		$ticketId = $request->cleanInt('csrv_ticket_id');
-		$attType  = $request->cleanString('newvalue');
-		$ticket = new Cportal_Ticket_Model();
+		$ticketId = $request->cleanInt('pk');
+		$attType  = $request->cleanString('value');
+		//was value submitted as '(X) some status'  ?
+		if (strpos($attType, ')')) {
+			sscanf($attType, '(%c) %s', $attType, $nothing);
+		}
+		if (trim($attType) == '') {
+			$response->result = 'error';
+			$response->statusCode = 401;
+			return;
+		}
+		if (strlen(trim($attType)) !== 1) {
+			$response->result = 'error';
+			$response->statusCode = 401;
+			return;
+		}
+
+
+		$ticket = _make('ticket_model');
 		if (!$ticket->load($ticketId)) {
 			$response->result = 'error';
 			$response->error_code = 401;
 			return;
 		}
-		$attend  = Cportal_Ticket_Model::ticketFactory($ticket);
-		$oldType = $attend->stageItem->get('code');
-		$attend->stageItem->set('code', $attType);
-		$attend->stageItem->save();
+		$ticket->loadStage();
+		$oldType = $ticket->stageItem->get('code');
+		$ticket->stageItem->set('code', $attType);
+		$ticket->stageItem->save();
 
 		$this->_logTicketChange($ticketId, $u->userId, "type", $oldType, $attType, $u->username);
-		$response->result = 'ok';
+		$response->result  = 'ok';
+		$response->newCode = $attType;
 	}
 
 	public function updateDateAction($request, $response) {
