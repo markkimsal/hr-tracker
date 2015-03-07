@@ -297,11 +297,7 @@ dojo.require("dijit.InlineEditBox");
 <br style="clear:both;"/>
 
 <h3>Description</h3>
-<div id="ieidesc" class="iedit_area" data-propdesc="Description" data-updateaction="emp/attend/updateDesc" data-name="description">
-<p>
-<?php echo nl2br($attItem->get('description')); ?>
-</p>
-</div>
+<div id="ieidesc" class="iedit_area" data-propdesc="Description" data-updateaction="emp/attend/updateDesc" data-name="description"><p><?php echo nl2br($attItem->get('description')); ?></p></div>
 
 
 <h3>Approved</h3>
