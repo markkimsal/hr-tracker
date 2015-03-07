@@ -8,8 +8,8 @@ class Ticket_Main {
 	var $usesPerms    = TRUE;
 
 	public function resources() {
-		associate_iAmA('datamodel', 'metrodb/datamodel.php');
-		associate_getMeA('datamodel');
+		_didef('datamodel', 'metrodb/datamodel.php');
+		_make('datamodel');
 		include('src/cportal/lib/Cportal_Ticket.php');
 	}
 
@@ -544,7 +544,7 @@ class Ticket_Main {
 	/**
 	 * send XML items down to ajax
 	 */
-	function logEvent($request, $response) {
+	function logAction($request, $response) {
 
 		$type = new Metrodb_Dataitem('csrv_ticket_type');
 		$response->types = $type->find();
@@ -558,6 +558,7 @@ class Ticket_Main {
 		$ticket = new Metrodb_Dataitem('csrv_ticket');
 		$ticket->load($request->cleanInt('id'));
 		if ($ticket->_isNew) {
+			$response->statusCode = 501;
 			trigger_error('cannot find ticket id #'.$request->cleanInt('id'));
 			return false;
 		}
@@ -574,7 +575,7 @@ class Ticket_Main {
 			$comments->sort('created_on', 'ASC');
 			$logs = $comments->find();
 			foreach ($logs as $_cobj) {
-				$response->items[] = $_cobj;
+				$response->addTo('items', $_cobj);
 				$itemTimes[] = $_cobj->created_on;
 			}
 			unset($logs);
@@ -585,17 +586,19 @@ class Ticket_Main {
 			$status->sort('created_on', 'ASC');
 			$logs = $status->find();
 			foreach ($logs as $_cobj) {
-				$response->items[] = $_cobj;
+				$response->addTo('items', $_cobj);
 				$itemTimes[] = $_cobj->created_on;
 			}
 			unset($logs);
 		}
+
 		//if type is not both, they will be sorted already based on the SQL sort;
 		if ($type == 'both') {
 			array_multisort($itemTimes,$response->items);
 		}
 
-		$this->presenter = 'self';
+		_iCanOwn('output', array($this, 'output'));
+//		$this->presenter = 'self';
 	}
 
 	function output($request, $response) {
