@@ -6,8 +6,6 @@
 	doLogUpdate('comments')
 
 	$('#link-status, #link-comments, #link-all').click(function(e) {
-		e.preventDefault();
-		var containerId = '#content'; /** Specify which element container */
 		var self = $(this);
 		var url = burl + self.data('source');
 		$(self.attr('href') + ' ol')
