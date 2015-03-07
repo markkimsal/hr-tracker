@@ -66,7 +66,7 @@ class Cportal_Ticket {
 		if (!$canOwn) {
 			$response->addTo('sparkMsg', 'No permission to lock tickets of this type.');
 			$this->presenter = 'redirect';
-			$response->url = m_appurl('cportal','ticket','view', 
+			$response->url = m_appurl('cportal','ticket','view',
 				array('id'=>$request->cleanInt('id'))
 			);
 			return false;
@@ -76,7 +76,7 @@ class Cportal_Ticket {
 		if ($ticket->is_locked == 1 && $ticket->owner_id != $u->userId) {
 			$response->addTo('sparkMsg', 'Ticket #'.$ticket->csrv_ticket_id.' is locked.');
 //			$response->redir = 'redirect';
-			$response->redir = m_appurl('cportal/ticket/viewlock', 
+			$response->redir = m_appurl('cportal/ticket/viewlock',
 				array('id'=>$request->cleanInt('id'))
 			);
 			return false;
@@ -176,7 +176,7 @@ class Cportal_Ticket {
 
 	function breaklockAction($request, $response) {
 		if (isset($request->vars['cncl-btn'])) {
-			$response->redir = m_appurl('cportal/main'); 
+			$response->redir = m_appurl('');
 			return false;
 		}
 		//assume submit button
@@ -187,7 +187,7 @@ class Cportal_Ticket {
 		if ($ticket->_isNew) {
 			$response->addTo('sparkMsg', array('msg'=>'Lost Ticket ID', 'type'=>'warn'));
 //			$u->addSessionMessage('Lost Ticket ID');
-			$response->redir = m_appurl('cportal/main'); 
+			$response->redir = m_appurl('');
 			return false;
 		}
 
@@ -200,7 +200,7 @@ class Cportal_Ticket {
 			return true;
 		}
 
-		$response->redir = m_appurl('cportal/main');
+		$response->redir = m_appurl('');
 	}
 
 	function unlockAction($request, $response) {
@@ -210,12 +210,12 @@ class Cportal_Ticket {
 
 		if ($ticket->is_locked == 1 && $ticket->owner_id != $u->userId) {
 //			$u->addSessionMessage('Ticket #'.$ticket->csrv_ticket_id.' is not owned by you.');
-			$response->redir = m_appurl('cportal/main'); 
+			$response->redir = m_appurl('');
 			return false;
 		}
 
 		$this->unlockTicket($ticket,$u);
-		$response->redir = m_appurl('cportal/main');
+		$response->redir = m_appurl('');
 	}
 
 	function unlockTicket($ticket, $u) {
@@ -243,7 +243,7 @@ class Cportal_Ticket {
 		$ticket = new Metrodb_Dataitem('csrv_ticket');
 		$id = $request->cleanInt('id');
 		$ticket->load($request->cleanInt('id'));
-		if ($id < 1) { 
+		if ($id < 1) {
 			$u->addSessionMessage('No ID sent, somethign is broken. #'.$ticket->csrv_ticket_id);
 			$this->presenter = 'redirect';
 			$response->url = m_appurl('cportal/main');
@@ -268,7 +268,7 @@ class Cportal_Ticket {
 		$ticket = new Metrodb_Dataitem('csrv_ticket');
 		$id = $request->cleanInt('id');
 		$u = $request->getUser();
-		if ($id < 1) { 
+		if ($id < 1) {
 			$response->addTo('sparkMsg', array('msg'=>'No ID sent, somethign is broken. #'.$ticket->csrv_ticket_id, 'type'=>'warn'));
 			$response->redir = m_appurl('cportal');
 			return false;
@@ -387,15 +387,15 @@ class Cportal_Ticket {
 
 		if ($isIdSearch) {
 //			$ticketsLoader->andWhere('csrv_ticket_type_id',$filter);
-			$ticketsLoader->andWhere('csrv_ticket_id','%'.$idTerms['id'].'%',' LIKE'); 
+			$ticketsLoader->andWhere('csrv_ticket_id','%'.$idTerms['id'].'%',' LIKE');
 			$response->searchCrit['terms'] = 'id:'.$idTerms['id'];
 		}
 
 		if ($isStatusSearch) {
 			$_st = array_shift($statusTerms);
-			$ticketsLoader->andWhere('csrv_ticket_status_id', $_st); 
+			$ticketsLoader->andWhere('csrv_ticket_status_id', $_st);
 			foreach( $statusTerms as $_st) {
-				$ticketsLoader->orWhereSub('csrv_ticket_status_id', $_st); 
+				$ticketsLoader->orWhereSub('csrv_ticket_status_id', $_st);
 			}
 //			$response->searchCrit['terms'] = 'id:'.$idTerms['id'];
 		}
@@ -502,7 +502,7 @@ class Cportal_Ticket {
 		$id = $request->cleanInt('id');
 		$finalStatusId = $request->cleanInt('status_id');
 		$u = $request->getUser();
-		if ($id < 1) { 
+		if ($id < 1) {
 			//$u->addSessionMessage('Note added to ticket #'.$ticket->csrv_ticket_id);
 			$response->addTo('sparkMsg', array('message'=>'Note added to ticket #'.$ticket->csrv_ticket_id, 'type'=>'info'));
 			$response->redir = m_appurl('cportal');
@@ -629,9 +629,9 @@ class Cportal_Ticket {
 		header ('Content-Type: text/html');
 		foreach ($response->items as $_cobj) {
 			echo '<li>On '.date('M jS @G:i', $_cobj->created_on).' user <i>'. $_cobj->author.'</i>';
-			if ( isset($_cobj->old_value) ) { 
+			if ( isset($_cobj->old_value) ) {
 				echo ' changed:<br/>';
-				if ( isset($_cobj->new_value) ) { 
+				if ( isset($_cobj->new_value) ) {
 					echo nl2br('<b>'.$_cobj->attr.'</b> from &quot;'.$_cobj->old_value.'&quot; => &quot;'.$_cobj->new_value.'&quot;');
 				} else {
 					echo nl2br('<b>'.$_cobj->attr.'</b> from &quot;'.$_cobj->old_value.'&quot;');
@@ -692,7 +692,7 @@ class Cportal_Ticket {
 		$l = new Cgn_Search_Index('tickets');
 
 
-		//basic multi term query.  Clean input string of quotes, use each word 
+		//basic multi term query.  Clean input string of quotes, use each word
 		//separated by a space as a search term.
 		//*
 		$query = new Zend_Search_Lucene_Search_Query_MultiTerm();
