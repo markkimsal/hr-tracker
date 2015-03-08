@@ -19,6 +19,10 @@
 function doLogUpdate(typ) {
 	var burl = $('body').data('burl')|| '/';
 	var pk = $('#details_obj_id').val();
+	//if we're not on a page that has the ID, just stop
+	if (pk == 0 || pk == undefined) {
+		return;
+	}
 	$.ajax({
 		url: burl + 'cportal/ticket/log/id='+pk+'/t='+typ,
 		type: 'GET',

@@ -447,7 +447,13 @@ class Cportal_Ticket {
 	 * Show a form to allow the user to enter a message before finalizing
 	 */
 	function finalizeAction($request, $response) {
-		$ticket = new Metrodb_Dataitem('csrv_ticket');
+
+		$status = _makeNew('dataitem', 'csrv_ticket_status');
+		$status->_rsltByPkey = TRUE;
+		$response->status = $status->find();
+
+
+		$ticket = _makeNew('dataitem', 'csrv_ticket');
 		$ticket->load($request->cleanInt('id'));
 		$response->finalStatusId = $request->cleanInt('status_id');
 		if ($response->finalStatusId === 0 ) {
@@ -468,11 +474,6 @@ class Cportal_Ticket {
 		$type = new Metrodb_Dataitem('csrv_ticket_type');
 		$type->_rsltByPkey = TRUE;
 		$response->types = $type->find();
-
-		$status = new Metrodb_Dataitem('csrv_ticket_status');
-		$status->andWhere('is_terminal','1');
-		$status->_rsltByPkey = TRUE;
-		$response->status = $status->find();
 
 
 		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($ticket);

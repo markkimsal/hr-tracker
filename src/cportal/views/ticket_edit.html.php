@@ -17,27 +17,22 @@ $editClass = ($response->viewOnly == FALSE) ? 'details_edit' : 'details_view';
 
 <div class="widget-box pull-left">
 <div class="widget-header">
-<h5><i class="fa fa-pushpin"></i>Ticket Info</h5>
+<h5><i class="fa fa-pushpin"></i>Ticket Info &mdash; #<?= $response->ticketObj->getId();?></h5>
 </div>
 <div class="widget-body">
-	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;text-align:center;width:9em;">
+	<div class="well pull-left">
 		<h5>Status</h5>
 		<?=str_replace(' ', '&nbsp;', $response->status[$statusId]->display_name);?>
 	</div>
-	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;width:10em;text-align:center;">
+	<div class="well pull-left">
 		<h5>Ticket Type</h5>
 		<?= $response->types[$typeId]->display_name;?>
 	</div>
-	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;width:9em;text-align:center;">
+	<div class="well pull-left">
 		<h5>Received</h5> 
 		<?= date('M jS',$response->ticketObj->dataItem->created_on);?>
 		<?= date('G:i',$response->ticketObj->dataItem->created_on);?>
 	</div>
-	<div class="well pull-left" data-off="float:left;border:1px solid #CCC;width:6em;text-align:center;">
-		<h5>No.</h5>
-		<?= $response->ticketObj->getId();?>
-	</div>
-
 <?php
 
 if ($response->viewonly == false) { ?>
