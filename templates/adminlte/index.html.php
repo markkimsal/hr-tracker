@@ -132,7 +132,9 @@ $user = $request->getUser();
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
+<!--
                                     <img src="<?php echo m_turl();?>metrou/img/show/profile.png" class="img-circle" alt="User Image" />
+-->
                                     <p>
                                        <?php echo $user->getDisplayName();?>
                                     </p>
