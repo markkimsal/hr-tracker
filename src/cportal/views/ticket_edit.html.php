@@ -11,7 +11,7 @@ $typeId   = $response->ticketObj->getTypeId();
 $statusId = $response->ticketObj->getStatusId();
 $pkey     = $response->ticketObj->getPrimaryKey();
 
-$editClass = ($response->viewOnly == FALSE) ? 'details_edit' : 'details_view';
+$editCss = ($response->viewOnly == FALSE) ? 'details_edit' : 'details_view';
 ?>
 
 
