@@ -15,7 +15,7 @@
 
 LOCK TABLES `csrv_ticket_status` WRITE;
 /*!40000 ALTER TABLE `csrv_ticket_status` DISABLE KEYS */;
-INSERT INTO `csrv_ticket_status` VALUES (1,'new','New',0,1,'N','000000','primary'),(2,'proc','Processing',0,0,'P','000000',''),(3,'hold','On Hold',0,0,'H','000000','inverse'),(4,'attn','Needs Attention',0,0,'E','000000','warning'),(5,'approv','Approved',1,0,'A','000000','primary'),(6,'rej','Rejected',1,0,'J','000000','error');
+INSERT INTO `csrv_ticket_status` VALUES (1,'new','New',0,1,'N','000000','primary'),(2,'proc','Processing',0,0,'P','000000','default'),(3,'hold','On Hold',0,0,'H','000000','inverse'),(4,'attn','Needs Attention',0,0,'E','000000','warning'),(5,'approv','Approved',1,0,'A','000000','primary'),(6,'rej','Rejected',1,0,'J','000000','error');
 /*!40000 ALTER TABLE `csrv_ticket_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
