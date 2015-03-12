@@ -13,6 +13,8 @@
 			   self.tab('show');
 			});
 	});
+
+	enableDataTables();
  });
 
 
@@ -81,6 +83,21 @@ function enableEdits() {
 			mode: 'inline',
 			pk: pk
 		});
+	});
+}
+
+
+function enableDataTables() {
+	var dtsettings = {};
+	var burl = $('body').data('burl')|| '/';
+	$('.dataTable').each(function(index) {
+		dtsettings = {};
+		if ($(this).data('source')) {
+			dtsettings.ajax = function (data, cb, settings) {
+				burl + $(this).data('source')
+			};
+		}
+		$('.dataTable').dataTable(dtsettings);
 	});
 }
 }(jQuery));
