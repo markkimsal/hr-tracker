@@ -106,9 +106,13 @@ function enableDataTables() {
 		dtsettings = {};
 
 		var dateCols = null;
+		var timeCols = null;
 		if ($(this).data('date-cols')) {
 			dateCols = new String($(this).data('date-cols')).split(',');
 			for(var i=0; i < dateCols.length; i++) { dateCols[i] = parseInt(dateCols[i]); } 
+
+			timeCols = new String($(this).data('time-cols')).split(',');
+			for(var i=0; i < timeCols.length; i++) { timeCols[i] = parseInt(timeCols[i]); } 
 
 			dtsettings.columnDefs = [
 				{
@@ -119,7 +123,17 @@ function enableDataTables() {
 						return moment(data).format("MMM Do YYYY");
 					},
 					"targets": dateCols
+				},
+				{
+					"render": function (data, type, row) {
+						if (type == "sort" || type == 'type') {
+							return data;
+						}
+						return moment(data).fromNow();
+					},
+					"targets": timeCols
 				}
+
 			]
 		}
 		if ($(this).data('source')) {

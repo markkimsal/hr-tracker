@@ -798,12 +798,11 @@ class Cportal_Ticket {
 	public static function formatDate($date)
 	{
 		return date('Y/m/d', $date);
-		//return date('M jS \'y', $date);
 	}
 
 	public static function formatTime($date)
 	{
-		return date('G:i a', $date);
+		return date('Y/m/d h:i:s a', $date);
 	}
 
 

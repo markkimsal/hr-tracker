@@ -1,4 +1,4 @@
-<table class="table table-hover dataTable" data-source="cportal/ticket/search" data-date-cols="1">
+<table class="table table-hover dataTable" data-source="cportal/ticket/search" data-date-cols="1" data-time-cols="2">
 <thead>
 <tr>
 <th>ID</th>
