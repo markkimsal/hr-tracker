@@ -630,8 +630,8 @@ class Cportal_Ticket {
 
 	public function pageJs($request, $template_section) {
 //		if ($request->actName == 'edit') {
-			echo '<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>';
-			echo '<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>';
+//			echo '<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>';
+//			echo '<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>';
 			echo '<script data-main="'.m_turl().'js/app/ticket" src="'.m_turl().'components/requirejs/require.js"></script>';
 //		}
 	}
