@@ -7,26 +7,33 @@ class Cportal_Main {
 	public $usesConfig   = true;
 	public $usesPerms    = true;
 
+	public $statusFinderService;
+	public $typeFinderService;
+	public $ticketFinderService;
+
+
+	public function resources() {
+		_didef('statusFinderService', _makeNew('dataitem', 'csrv_ticket_status'));
+		_didef('typeFinderService',   _makeNew('dataitem', 'csrv_ticket_type'));
+		_didef('ticketFinderService', _makeNew('dataitem', 'csrv_ticket'));
+	}
+
 	public function output() {
 		_set('page.title', 'Dashboard');
 		_set('page.header', 'Dashboard');
-	}
-
-	public function __construct () {
 	}
 
 	/**
 	 * Show a dashboard type home screen
 	 */
 	function mainAction($request, $response, $user) {
-		$status = _make('dataitem', 'csrv_ticket_status');
-		$status->andWhere('is_terminal', '0');
-		$status->_rsltByPkey = TRUE;
-		$response->status = $status->find();
 
-		$type = _make('dataitem', 'csrv_ticket_type');
-		$type->_rsltByPkey = TRUE;
-		$response->types = $type->find();
+		$this->typeFinderService->_rsltByPkey = TRUE;
+		$response->types = $this->typeFinderService->find();
+
+		$this->statusFinderService->_rsltByPkey = TRUE;
+		$this->statusFinderService->andWhere('is_terminal', 0);
+		$response->status = $this->statusFinderService->find();
 
 		$tickets = array();
 		foreach($response->status as $_st) {
