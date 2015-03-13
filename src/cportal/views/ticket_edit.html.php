@@ -64,7 +64,7 @@ if ($response->viewonly == false) { ?>
 <?php
 if ($response->viewonly == false) { ?>
 <div class="row">
-<div class="col-sm-4 pull-left">
+<div class="col-sm-12 pull-left">
 <div style="padding-left:1em;border:0;border-left:7px;border-color:#CCC; border-style:solid; margin-bottom:1em;">
 Actions<hr style="margin:0;width:44em;"/>
 <p>
