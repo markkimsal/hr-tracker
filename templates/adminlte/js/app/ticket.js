@@ -1,3 +1,15 @@
+require.config({
+paths: {
+    jquery: '../../components/jquery/dist/jquery', 
+    moment: '../../components/moment/moment', 
+    datatables: '../../components/DataTables/media/js/jquery.dataTables'
+},
+shim: {
+      "datatables": ['jquery'],
+      "moment": ['jquery']
+     }
+});
+require( ['jquery', 'datatables', 'moment'], function($, dataTable, moment) {
 (function($) {
  $(document).ready(function() {
 	var burl = $('body').data('burl')|| '/';
@@ -92,12 +104,41 @@ function enableDataTables() {
 	var burl = $('body').data('burl')|| '/';
 	$('.dataTable').each(function(index) {
 		dtsettings = {};
+
+		var dateCols = null;
+		if ($(this).data('date-cols')) {
+			dateCols = new String($(this).data('date-cols')).split(',');
+			for(var i=0; i < dateCols.length; i++) { dateCols[i] = parseInt(dateCols[i]); } 
+
+			dtsettings.columnDefs = [
+				{
+					"render": function (data, type, row) {
+						if (type == "sort" || type == 'type') {
+							return data;
+						}
+						return moment(data).format("MMM Do YYYY");
+					},
+					"targets": dateCols
+				}
+			]
+		}
 		if ($(this).data('source')) {
-			dtsettings.ajax = function (data, cb, settings) {
-				burl + $(this).data('source')
+			dtsettings.ajax = {
+				"url": burl + $(this).data('source'),
+				"dataSrc": "main"
 			};
+/*
+			dtsettings.ajax = function (data, cb, settings) {
+				$.ajax({
+					"url": burl + $(this).data('source')
+				}).done(function(data) {
+					cb( {data:data.main} );
+				});
+			};
+*/
 		}
 		$('.dataTable').dataTable(dtsettings);
 	});
 }
 }(jQuery));
+});

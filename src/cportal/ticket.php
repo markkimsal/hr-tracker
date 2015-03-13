@@ -621,13 +621,19 @@ class Cportal_Ticket {
 		_set('page.header',    'Ticket');
 		_set('page.subheader', $request->actName);
 
-		_iCanHandle('template.pagejs', array($this, 'pageJs'));
+		_iCanHandle('template.pagejs',  array($this, 'pageJs'));
+		_iCanHandle('template.pagecss', array($this, 'pageCss'));
+	}
+
+	public function pageCss($request, $template_section) {
+			echo '<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css">';
 	}
 
 	public function pageJs($request, $template_section) {
 //		if ($request->actName == 'edit') {
-			echo'<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>';
-			echo'<script src="'.m_turl().'js/app/ticket.js"></script>';
+			echo '<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.js"></script>';
+			echo '<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.js"></script>';
+			echo '<script data-main="'.m_turl().'js/app/ticket" src="'.m_turl().'components/requirejs/require.js"></script>';
 //		}
 	}
 
@@ -786,9 +792,13 @@ class Cportal_Ticket {
 	}
 
 
+	/**
+	 * Format as yyyy/mm/dd for js parsing
+	 */
 	public static function formatDate($date)
 	{
-		return date('M jS \'y', $date);
+		return date('Y/m/d', $date);
+		//return date('M jS \'y', $date);
 	}
 
 	public static function formatTime($date)
@@ -871,6 +881,129 @@ return true;
 		$html = ob_get_contents();
 		ob_end_clean();
 		echo $html;
+	}
+
+
+	/**
+	 * Pure ajax response
+	 */
+	public function searchAction($request, $response) {
+
+/*
+		$status = new Metrodb_Dataitem('csrv_ticket_status');
+//		$status->andWhere('is_terminal','0');
+		$status->_rsltByPkey = TRUE;
+		$response->status = $status->find();
+
+		$type = new Metrodb_Dataitem('csrv_ticket_type');
+		$type->_rsltByPkey = TRUE;
+		$response->types = $type->find();
+
+		$filter = $request->cleanInt('type');
+*/
+
+		$ticketsLoader = new Metrodb_Dataitem('csrv_ticket');
+		$ticketsLoader->hasOne('user_login','user_login_id', 'owner_id', 'Tuser');
+		$ticketsLoader->hasOne('user_account','user_account_id', 'user_account_id', 'Tacc');
+		$ticketsLoader->_cols = array('csrv_ticket.*','Tuser.username', 'Tacc.contact_email', 'Tacc.lastname', 'Tacc.firstname');
+		$ticketsLoader->sort('created_on');
+
+		//determine search string
+/*
+		$srch = $request->cleanString('srch');
+		if ($srch === '') {
+			$srch = $request->cleanString('terms');
+		}
+
+		//determine if the search string is an ID search or not
+		$idTerms = array();
+		$idSrch = $request->cleanString('id-srch');
+		if ($idSrch !== '') {
+			$srch = 'id:'.$idSrch;
+		}
+		$isIdSearch = $this->getIdSearch($srch, $idTerms);
+
+		//determine if the search string is a date search or not
+		$dateTerms = array();
+		$dateMonth = $request->cleanInt('quick-srch-month');
+		$dateDay = $request->cleanInt('quick-srch-day');
+		$dateYear = $request->cleanInt('quick-srch-year');
+		if ($dateMonth > 0) {
+			$srch = $dateMonth.'-'.$dateDay.'-'.$dateYear;
+		}
+		$isDateSearch = $this->getDateSearch($srch, $dateTerms);
+
+		//determine if search string is a status or not
+		$statusTerms = array();
+		$isStatusSearch = $this->getStatusSearch($srch, $statusTerms);
+
+		//Lucene Search
+		if (!$isDateSearch && !$isIdSearch && !$isStatusSearch && $srch !== '') {
+			include_once(CGN_LIB_PATH.'/Zend/Search/Lucene.php');
+			$ids = $this->searchLucene($srch);
+			if (count($ids) > 0) {
+				$ticketsLoader->andWhere('csrv_ticket_id',  $ids, 'IN');
+			} else {
+				$response->addTo('sparkMsg','No Results.');
+				$response->searchCrit = array(
+					'total_rec'=>0,
+					'rpp'=>$this->rpp,
+					'terms'=>$srch,
+					'incl-old'=>'0'
+				);
+				return false;
+			}
+		}
+
+		//date search
+		if ($isDateSearch) {
+//			$ticketsLoader->andWhere('csrv_ticket_type_id',$filter);
+			$ticketsLoader->andWhere('created_on',$dateTerms['startTime'], '>=');
+			$ticketsLoader->andWhere('created_on',$dateTerms['endTime'], '<=');
+		}
+
+		if ($isIdSearch) {
+//			$ticketsLoader->andWhere('csrv_ticket_type_id',$filter);
+			$ticketsLoader->andWhere('csrv_ticket_id','%'.$idTerms['id'].'%',' LIKE');
+			$response->searchCrit['terms'] = 'id:'.$idTerms['id'];
+		}
+
+		if ($isStatusSearch) {
+			$_st = array_shift($statusTerms);
+			$ticketsLoader->andWhere('csrv_ticket_status_id', $_st);
+			foreach( $statusTerms as $_st) {
+				$ticketsLoader->orWhereSub('csrv_ticket_status_id', $_st);
+			}
+//			$response->searchCrit['terms'] = 'id:'.$idTerms['id'];
+		}
+
+*/
+		$status = new Metrodb_Dataitem('csrv_ticket_status');
+		$status->_rsltByPkey = TRUE;
+		$listStatus = $status->find();
+
+		$type = new Metrodb_Dataitem('csrv_ticket_type');
+		$type->_rsltByPkey = TRUE;
+		$listType  = $type->find();
+
+
+		//let client cache search results for 4 min
+		header('Expires: '.date('D, d M Y h:i:s T', time()+240));
+		header('Cache-Control: public');
+		header('Pragma: cache');
+
+
+		$ticketList = $ticketsLoader->findAsArray();
+		foreach ($ticketList as $_t) {
+			$response->addTo('main', array( 
+				$_t['csrv_ticket_id'],
+				Cportal_Ticket::formatDate($_t['created_on']),
+				Cportal_Ticket::formatTime($_t['created_on']),
+				$listType[$_t['csrv_ticket_type_id']]->display_name,
+				$listStatus[$_t['csrv_ticket_status_id']]->display_name,
+				$_t['lastname'] .', '.$_t['firstname']
+			));
+		}
 	}
 }
 
