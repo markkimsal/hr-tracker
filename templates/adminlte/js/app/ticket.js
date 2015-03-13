@@ -21,6 +21,12 @@ require( ['jquery', 'datatables', 'moment'], function($, dataTable, moment) {
 (function($) {
 	enableDataTables();
 
+	var burl = $('body').data('burl')|| '/';
+    $('.dataTable tbody').on( 'click', 'tr', function () {
+		var td = $(this).find('td:first-child')
+		window.location.href = burl + 'cportal/ticket/view/id='+td.html();
+    } );
+
 function enableDataTables() {
 	var dtsettings = {};
 	var burl = $('body').data('burl')|| '/';
@@ -42,7 +48,7 @@ function enableDataTables() {
 						if (type == "sort" || type == 'type') {
 							return data;
 						}
-						return moment(data).format("MMM Do YYYY");
+						return moment(new Date(data)).format("MMM Do YYYY");
 					},
 					"targets": dateCols
 				},
@@ -51,7 +57,7 @@ function enableDataTables() {
 						if (type == "sort" || type == 'type') {
 							return data;
 						}
-						return moment(data).fromNow();
+						return moment(new Date(data)).fromNow();
 					},
 					"targets": timeCols
 				}
