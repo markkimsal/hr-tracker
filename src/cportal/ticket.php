@@ -6,16 +6,21 @@ class Cportal_Ticket {
 	var $requireLogin = TRUE;
 	var $rpp          = 200; //records per page
 	var $usesPerms    = TRUE;
+	public $statusFinderService;
+	public $typeFinderService;
+	public $ticketFinderService;
 
+
+	public function resources() {
+		_didef('statusFinderService', _makeNew('dataitem', 'csrv_ticket_status'));
+		_didef('typeFinderService',   _makeNew('dataitem', 'csrv_ticket_type'));
+		_didef('ticketFinderService', _makeNew('dataitem', 'csrv_ticket'));
+	}
+
+	/**
+	 * Hack to load ticketmodel for static methods
+	 */
 	public function __construct() {
-		/*
-		$name = 'custserv';
-		Cgn_ObjectStore::storeConfig("config://template/default/name", $name);
-		 */
-		_didef('dataitem', 'metrodb/dataitem.php');
-//		_make('dataitem', 'nothing');
-		_didef('datamodel', 'metrodb/datamodel.php');
-//		_make('datamodel');
 		include_once('src/workflow/ticketmodel.php');
 	}
 
@@ -28,29 +33,23 @@ class Cportal_Ticket {
 	function editAction($request, $response) {
 		self::setupSidebar();
 
-		$type = _makeNew('dataitem', 'csrv_ticket_type');
-		$type->_rsltByPkey = TRUE;
-		$response->types = $type->find();
-
 		$response->editMode = TRUE;
 
-		$status = _makeNew('dataitem', 'csrv_ticket_status');
-//		$status->andWhere('is_terminal', 0);
-//		$status->andWhere('is_initial', 0);
-		$status->_rsltByPkey = TRUE;
-		$response->status = $status->find();
+		$this->typeFinderService->_rsltByPkey = TRUE;
+		$response->types = $this->typeFinderService->find();
 
+		$this->statusFinderService->_rsltByPkey = TRUE;
+		$response->status = $this->statusFinderService->find();
 
-		$ticket = _makeNew('dataitem', 'csrv_ticket');
-		$ticket->load($request->cleanInt('id'));
-		if ($ticket->_isNew) {
+		$this->ticketFinderService->load($request->cleanInt('id'));
+		if ($this->ticketFinderService->_isNew) {
 			$response->addTo('sparkMsg', 'cannot find ticket id #'.$request->cleanInt('id'));
 			trigger_error('cannot find ticket id #'.$request->cleanInt('id'));
 			return false;
 		}
 
 		$u = $request->getUser();
-		$canOwn = $this->_checkTicketGroupPerms($u, $ticket, $response->types);
+		$canOwn = $this->_checkTicketGroupPerms($u, $this->ticketFinderService, $response->types);
 		if (!$canOwn) {
 			$response->addTo('sparkMsg', 'No permission to lock tickets of this type.');
 			$this->presenter = 'redirect';
@@ -61,8 +60,8 @@ class Cportal_Ticket {
 
 		}
 
-		if ($ticket->is_locked == 1 && $ticket->owner_id != $u->userId) {
-			$response->addTo('sparkMsg', 'Ticket #'.$ticket->csrv_ticket_id.' is locked.');
+		if ($this->ticketFinderService->is_locked == 1 && $this->ticketFinderService->owner_id != $u->userId) {
+			$response->addTo('sparkMsg', 'Ticket #'.$this->ticketFinderService->csrv_ticket_id.' is locked.');
 //			$response->redir = 'redirect';
 			$response->redir = m_appurl('cportal/ticket/viewlock',
 				array('id'=>$request->cleanInt('id'))
@@ -70,38 +69,38 @@ class Cportal_Ticket {
 			return false;
 		}
 
-		$this->appendTicketList($request->cleanInt('id'), Workflow_Tickettype::getCodeLetter($ticket->csrv_ticket_type_id));
+		$this->appendTicketList($request->cleanInt('id'), Workflow_Tickettype::getCodeLetter($this->ticketFinderService->csrv_ticket_type_id));
 
 		$oldValue = '';
-		if ($ticket->csrv_ticket_status_id == 1) {
+		if ($this->ticketFinderService->csrv_ticket_status_id == 1) {
 			foreach ($response->status as $_st) {
 				if ($_st->code == 'proc') {
-					$oldValue = $response->status[$ticket->csrv_ticket_status_id]->display_name;
-					$newValue = $response->status[$ticket->csrv_ticket_status_id]->display_name;
-					$ticket->csrv_ticket_status_id = $_st->csrv_ticket_status_id;
-					$ticket->save();
-					$this->logTicketChange($ticket->csrv_ticket_id, $u->userId, 'Status', $oldValue, $newValue, $u->username);
+					$oldValue = $response->status[$this->ticketFinderService->csrv_ticket_status_id]->display_name;
+					$newValue = $response->status[$this->ticketFinderService->csrv_ticket_status_id]->display_name;
+					$this->ticketFinderService->csrv_ticket_status_id = $_st->csrv_ticket_status_id;
+					$this->ticketFinderService->save();
+					$this->logTicketChange($this->ticketFinderService->csrv_ticket_id, $u->userId, 'Status', $oldValue, $newValue, $u->username);
 				}
 			}
 		}
 
-		if ($ticket->is_locked == 0) {
-			$ticket->is_locked = 1;
-			$this->logTicketChange($ticket->csrv_ticket_id, $u->userId, 'Lock', '0', 1, $u->username);
-			$ticket->save();
+		if ($this->ticketFinderService->is_locked == 0) {
+			$this->ticketFinderService->is_locked = 1;
+			$this->logTicketChange($this->ticketFinderService->csrv_ticket_id, $u->userId, 'Lock', '0', 1, $u->username);
+			$this->ticketFinderService->save();
 		}
-		if ($ticket->owner_id != $u->userId) {
-			$oldUser = Metrou_User::load($ticket->owner_id);
+		if ($this->ticketFinderService->owner_id != $u->userId) {
+			$oldUser = Metrou_User::load($this->ticketFinderService->owner_id);
 			if (is_object($oldUser)) {
 				$oldValue = $oldUser->username;
 			}
 			if ($oldValue == '') { $oldValue = 'nobody'; }
-			$ticket->owner_id = $u->userId;
-			$this->logTicketChange($ticket->csrv_ticket_id, $u->userId, 'Owner', $oldValue, null, $u->username);
-			$ticket->save();
+			$this->ticketFinderService->owner_id = $u->userId;
+			$this->logTicketChange($this->ticketFinderService->csrv_ticket_id, $u->userId, 'Owner', $oldValue, null, $u->username);
+			$this->ticketFinderService->save();
 		}
 
-		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($ticket);
+		$response->ticketObj = Workflow_Ticketmodel::ticketFactory($this->ticketFinderService);
 
 		$final = _makeNew('dataitem', 'csrv_ticket_status');
 		$final->andWhere('is_terminal', 1);
@@ -110,7 +109,7 @@ class Cportal_Ticket {
 
 /*
 		$comments = _makeNew('dataitem', 'csrv_ticket_comment');
-		$comments->andWhere('csrv_ticket_id', $ticket->csrv_ticket_id);
+		$comments->andWhere('csrv_ticket_id', $this->ticketFinderService->csrv_ticket_id);
 		$response->comments = $comments->find();
 */
 		_iCanHandle('template.ticket_edit', 'cportal/ticket.php::editView');
@@ -845,6 +844,7 @@ class Cportal_Ticket {
 		$typeCode = $typeObj->get('code');
 		if (!$typeCode) { return FALSE; }
 
+		//TODO fix permissions
 return true;
 		return $this->hasPermission($u, 'ticketOwn', $typeCode);
 	}
@@ -901,11 +901,10 @@ return true;
 		$filter = $request->cleanInt('type');
 */
 
-		$ticketsLoader = new Metrodb_Dataitem('csrv_ticket');
-		$ticketsLoader->hasOne('user_login','user_login_id', 'owner_id', 'Tuser');
-		$ticketsLoader->hasOne('user_account','user_account_id', 'user_account_id', 'Tacc');
-		$ticketsLoader->_cols = array('csrv_ticket.*','Tuser.username', 'Tacc.contact_email', 'Tacc.lastname', 'Tacc.firstname');
-		$ticketsLoader->sort('created_on');
+		$this->ticketFinderService->hasOne('user_login','user_login_id', 'owner_id', 'Tuser');
+		$this->ticketFinderService->hasOne('user_account','user_account_id', 'user_account_id', 'Tacc');
+		$this->ticketFinderService->_cols = array('csrv_ticket.*','Tuser.username', 'Tacc.contact_email', 'Tacc.lastname', 'Tacc.firstname');
+		$this->ticketFinderService->sort('created_on');
 
 		//determine search string
 /*
@@ -941,7 +940,7 @@ return true;
 			include_once(CGN_LIB_PATH.'/Zend/Search/Lucene.php');
 			$ids = $this->searchLucene($srch);
 			if (count($ids) > 0) {
-				$ticketsLoader->andWhere('csrv_ticket_id',  $ids, 'IN');
+				$this->ticketFinderService->andWhere('csrv_ticket_id',  $ids, 'IN');
 			} else {
 				$response->addTo('sparkMsg','No Results.');
 				$response->searchCrit = array(
@@ -956,34 +955,32 @@ return true;
 
 		//date search
 		if ($isDateSearch) {
-//			$ticketsLoader->andWhere('csrv_ticket_type_id',$filter);
-			$ticketsLoader->andWhere('created_on',$dateTerms['startTime'], '>=');
-			$ticketsLoader->andWhere('created_on',$dateTerms['endTime'], '<=');
+//			$this->ticketFinderService->andWhere('csrv_ticket_type_id',$filter);
+			$this->ticketFinderService->andWhere('created_on',$dateTerms['startTime'], '>=');
+			$this->ticketFinderService->andWhere('created_on',$dateTerms['endTime'], '<=');
 		}
 
 		if ($isIdSearch) {
-//			$ticketsLoader->andWhere('csrv_ticket_type_id',$filter);
-			$ticketsLoader->andWhere('csrv_ticket_id','%'.$idTerms['id'].'%',' LIKE');
+//			$this->ticketFinderService->andWhere('csrv_ticket_type_id',$filter);
+			$this->ticketFinderService->andWhere('csrv_ticket_id','%'.$idTerms['id'].'%',' LIKE');
 			$response->searchCrit['terms'] = 'id:'.$idTerms['id'];
 		}
 
 		if ($isStatusSearch) {
 			$_st = array_shift($statusTerms);
-			$ticketsLoader->andWhere('csrv_ticket_status_id', $_st);
+			$this->ticketFinderService->andWhere('csrv_ticket_status_id', $_st);
 			foreach( $statusTerms as $_st) {
-				$ticketsLoader->orWhereSub('csrv_ticket_status_id', $_st);
+				$this->ticketFinderService->orWhereSub('csrv_ticket_status_id', $_st);
 			}
 //			$response->searchCrit['terms'] = 'id:'.$idTerms['id'];
 		}
 
 */
-		$status = new Metrodb_Dataitem('csrv_ticket_status');
-		$status->_rsltByPkey = TRUE;
-		$listStatus = $status->find();
+		$this->statusFinderService->_rsltByPkey = TRUE;
+		$listStatus = $this->statusFinderService->find();
 
-		$type = new Metrodb_Dataitem('csrv_ticket_type');
-		$type->_rsltByPkey = TRUE;
-		$listType  = $type->find();
+		$this->typeFinderService->_rsltByPkey = TRUE;
+		$listType  = $this->typeFinderService->find();
 
 
 		//let client cache search results for 4 min
@@ -992,7 +989,7 @@ return true;
 		header('Pragma: cache');
 
 
-		$ticketList = $ticketsLoader->findAsArray();
+		$ticketList = $this->ticketFinderService->findAsArray();
 		foreach ($ticketList as $_t) {
 			$response->addTo('main', array( 
 				$_t['csrv_ticket_id'],
