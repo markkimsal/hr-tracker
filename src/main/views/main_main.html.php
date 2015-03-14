@@ -229,7 +229,7 @@ border-bottom:none;
 			echo '<td '.$tdClass.'>
 			<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
 				<a href="'.m_appurl('cportal/ticket/view',array('id'=>$ticketObj->csrv_ticket_id)).'" class="blue">
-					<i class="fa fa-search-plus fa-lg"></i>
+					<i class="fa fa-search fa-lg"></i>
 				</a>
 			';
 			if($ticketObj->is_locked) {
@@ -251,14 +251,14 @@ border-bottom:none;
 			<div class="visible-xs visible-sm hidden-md hidden-lg">
 				<div class="inline position-relative">
 					<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
-						<i class="icon-caret-down icon-only bigger-120"></i>
+						<i class="fa fa-caret-down icon-only fa-lg"></i>
 					</button>
 
 					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
 						<li>
 							<a href="'.m_appurl('cportal/ticket/view',array('id'=>$ticketObj->csrv_ticket_id)).'" class="tooltip-info" data-rel="tooltip" title="" data-original-title="View">
 								<span class="blue">
-									<i class="icon-zoom-in bigger-120"></i>
+									<i class="fa fa-search fa-lg"></i>
 								</span>
 							</a>
 						</li>
@@ -266,7 +266,7 @@ border-bottom:none;
 						<li>
 							<a href="'.m_appurl('cportal/ticket/edit',array('id'=>$ticketObj->csrv_ticket_id)).'" class="tooltip-success" data-rel="tooltip" title="" data-original-title="Edit">
 								<span class="green">
-									<i class="icon-edit bigger-120"></i>
+									<i class="fa fa-lock fa-lg"></i>
 								</span>
 							</a>
 						</li>
