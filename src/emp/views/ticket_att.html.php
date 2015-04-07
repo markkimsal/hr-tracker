@@ -46,9 +46,7 @@ $fdate = $idate[1].'/'.$idate[2].'/'.$idate[0];
 	<h3>Points</h3>
 	<p>
 
-	<div id="ieipoint" class="iedit_text" data-propdesc="Points" data-updateaction="emp/attend/updatePoints" data-name="points">
-		<?php echo $attItem->get('points');?>
-    </div>
+	<div id="ieipoint" class="iedit_text" data-propdesc="Points" data-updateaction="emp/attend/updatePoints" data-name="points"><?php echo $attItem->get('points');?></div>
 	</p>
 	<br style="clear:both;"/>
 </div>
