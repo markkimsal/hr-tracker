@@ -9,6 +9,7 @@ class Cportal_Ticket {
 	public $statusFinderService;
 	public $typeFinderService;
 	public $ticketFinderService;
+	public $eventEmitterService;
 
 
 	public function resources() {
@@ -485,8 +486,6 @@ class Cportal_Ticket {
 	 * Signal could be one of:
 	 *   csrv_ticket_closed_approv
 	 *   csrv_ticket_closed_rej
-	 *   csrv_order_closed_approv
-	 *   csrv_order_closed_rej
 	 */
 	function closeAction($request, $response) {
 		$ticket = new Metrodb_Dataitem('csrv_ticket');
@@ -512,22 +511,12 @@ class Cportal_Ticket {
 		$statusCode = Workflow_Ticket_Status::getStatusCode($finalStatusId);
 		$signalName = 'csrv_ticket_closed_'.$statusCode;
 
-		/*
-		if ($ticket->csrv_ticket_type_id === Cportal_Ticket_Type::$TICK_TYPE_ORDER) {
-			$signalName = 'csrv_order_closed_'.$statusCode;
-
-		}
-		 */
-
 		//Send a signal that this ticket was closed
 		//could be :
 		// csrv_ticket_closed_approv
 		// csrv_ticket_closed_rej
-		// csrv_order_closed_approv
-		// csrv_order_closed_rej
 		$this->ticket = $ticket;
-//		$signalResult = $this->emit($signalName);
-		$signalResult = Metrofw_Kernel::emit($signalName, $this);
+		$signalResult = $this->eventEmitterService->emit($signalName, $this);
 
 		if ($signalResult !== FALSE) {
 			$ticket->save();

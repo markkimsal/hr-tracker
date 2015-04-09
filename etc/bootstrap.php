@@ -36,6 +36,7 @@ _didef('attendance_model', 'emp/attendancemodel.php');
 _didef('wpi_model', 'emp/wpimodel.php');
 _didef('safety_model', 'emp/safetymodel.php');
 
+_didef('eventEmitterService', 'workflow/eventemitter.php');
 
 // signals and slots
 _iCanHandle('workflow.ticket.save.after', 'workflow/luceneindexer.php::index');
