@@ -556,6 +556,8 @@ class Metroform_Form_Layout {
 			$html .= $e->label.'</td><td class="form_cell_input" valign="top">'."\n";
 			if ($e->type == 'textarea') {
 				$html .= '<textarea name="'.$e->name.'" id="'.$e->name.'" rows="'.$e->rows.'" cols="'.$e->cols.'" >'.htmlentities($e->value,ENT_QUOTES).'</textarea>'."\n";
+			} else if ($e->type == 'radio') {
+				$html .= '<div class="checkbox">'.$e->toHtml().'</div>'."\n";
 			} else if ($e->type != '') {
 				$html .= $e->toHtml();
 			} else {
