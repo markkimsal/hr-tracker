@@ -39,6 +39,8 @@ _didef('safety_model', 'emp/safetymodel.php');
 
 // signals and slots
 _iCanHandle('workflow.ticket.save.after', 'workflow/luceneindexer.php::index');
+_iCanHandle('csrv_ticket_closed_approv',  'workflow/finalize.php::approveTicket');
+_iCanHandle('csrv_ticket_closed_rej',     'workflow/finalize.php::rejectTicket');
 //_iCanHandle('workflow.ticket.save.after', 'workflow/esindexer.php::index');
 //_iCanHandle('workflow.ticket.save.after', 'workflow/solrindexer.php::index');
 
