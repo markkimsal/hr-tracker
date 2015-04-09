@@ -31,7 +31,7 @@ class Workflow_Ticketmodel extends Metrodb_Datamodel {
 		$nameDi = $finder->get('mod_library');
 		$this->stageItem = _makeNew($nameDi);
 		$this->stageItem->load( 
-			array('csrv_ticket_id'=>$this->dataItem->getPrimaryKey())
+			array('csrv_ticket_id = '.$this->dataItem->getPrimaryKey())
 		);
 	}
 
