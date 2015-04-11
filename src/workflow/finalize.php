@@ -24,6 +24,10 @@ class Workflow_Finalize {
 
 		$incidentTicket = Workflow_Ticketmodel::ticketFactory($ticket);
 		$incident = $incidentTicket->getStage();
+		//object has already been deleted, some kind of error
+		if ($incident->_isNew) {
+			return FALSE;
+		}
 
 		//override row-level access because we are in
 		//a part of the code that can only be called by a library.

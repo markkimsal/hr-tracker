@@ -522,8 +522,7 @@ class Cportal_Ticket {
 			$ticket->save();
 		} else {
 			$u = $request->getUser();
-			//$u->addSessionMessage('Unable to CLOSE ticket', 'msg_warn');
-			$response->addTo('sparkMsg', array('message'=>'Unable to CLOSE ticket', 'type'=>'error'));
+			$response->addUserMessage('Unable to close ticket.', 'error');
 			$response->redir = m_appurl('cportal/ticket/finalize'). '?status_id='.$finalStatusId.'&id='.$request->cleanInt('id');
 			return;
 		}
@@ -537,8 +536,6 @@ class Cportal_Ticket {
 			$comment->author    = $request->getUser()->username;
 			$comment->save();
 		}
-
-
 
 		$u = $request->getUser();
 		$response->addTo('sparkMsg', 'Ticket Closed: #'.$ticket->csrv_ticket_id);
