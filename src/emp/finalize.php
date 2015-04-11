@@ -1,10 +1,12 @@
 <?php
 
 /**
- * _iCanHandle('csrv_ticket_closed_approv', 'workflow/finalize.php::approveTicket');
- * _iCanHandle('csrv_ticket_closed_rej',    'workflow/finalize.php::rejectTicket');
+ * Save the approve=Y field or delete employee tickets.
+ *
+ * _iCanHandle('csrv_ticket_closed_approv', 'emp/finalize.php::approveTicket');
+ * _iCanHandle('csrv_ticket_closed_rej',    'emp/finalize.php::rejectTicket');
  */
-class Workflow_Finalize {
+class Emp_Finalize {
 
 	/**
 	 * Delete an incident ticket permanently
@@ -18,6 +20,7 @@ class Workflow_Finalize {
 
 		$type = new Workflow_Tickettype($ticket->get('csrv_ticket_type_id'));
 		$className = $type->get('class_name');
+		//we only deal with employee data 
 		if (stripos($className, 'emp') === FALSE) {
 			return FALSE;
 		}
@@ -50,6 +53,7 @@ class Workflow_Finalize {
 
 		$type = new Workflow_Tickettype($ticket->get('csrv_ticket_type_id'));
 		$className = $type->get('class_name');
+		//we only deal with employee data 
 		if (stripos($className, 'emp') === FALSE) {
 			return FALSE;
 		}

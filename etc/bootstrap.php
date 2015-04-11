@@ -31,18 +31,18 @@ _didef('foobar',         (object)array());
 _didef('form',           'metroform/form.php');
 _didef('Cpemp_Att_Ticket',           'emp/attendancemodel.php');
 
-_didef('ticket_model',   'workflow/ticketmodel.php');
-_didef('employee_model', 'emp/employee.php');
+_didef('ticket_model',     'workflow/ticketmodel.php');
+_didef('employee_model',   'emp/employee.php');
 _didef('attendance_model', 'emp/attendancemodel.php');
-_didef('wpi_model', 'emp/wpimodel.php');
-_didef('safety_model', 'emp/safetymodel.php');
+_didef('wpi_model',        'emp/wpimodel.php');
+_didef('safety_model',     'emp/safetymodel.php');
 
 _didef('eventEmitterService', 'workflow/eventemitter.php');
 
 // signals and slots
 _iCanHandle('workflow.ticket.save.after', 'workflow/luceneindexer.php::index');
-_iCanHandle('csrv_ticket_closed_approv',  'workflow/finalize.php::approveTicket');
-_iCanHandle('csrv_ticket_closed_rej',     'workflow/finalize.php::rejectTicket');
+_iCanHandle('csrv_ticket_closed_approv',  'emp/finalize.php::approveTicket');
+_iCanHandle('csrv_ticket_closed_rej',     'emp/finalize.php::rejectTicket');
 //_iCanHandle('workflow.ticket.save.after', 'workflow/esindexer.php::index');
 //_iCanHandle('workflow.ticket.save.after', 'workflow/solrindexer.php::index');
 
