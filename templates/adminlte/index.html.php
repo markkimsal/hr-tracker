@@ -241,9 +241,9 @@ $user = $request->getUser();
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-<? /* Metrofw_Template::parseSection('sparkmsg'); */?>
+<?php Metrofw_Template::parseSection('sparkmsg'); ?>
 
-<?= Metrofw_Template::parseSection('main');?>
+<?php Metrofw_Template::parseSection('main');?>
 
 								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
