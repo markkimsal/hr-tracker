@@ -44,7 +44,7 @@ class Cportal_Ticket {
 
 		$this->ticketFinderService->load($request->cleanInt('id'));
 		if ($this->ticketFinderService->_isNew) {
-			$response->addTo('sparkMsg', 'cannot find ticket id #'.$request->cleanInt('id'));
+			$response->addUserMessage('cannot find ticket id #'.$request->cleanInt('id'), 'error');
 			trigger_error('cannot find ticket id #'.$request->cleanInt('id'));
 			return false;
 		}
@@ -52,9 +52,8 @@ class Cportal_Ticket {
 		$u = $request->getUser();
 		$canOwn = $this->_checkTicketGroupPerms($u, $this->ticketFinderService, $response->types);
 		if (!$canOwn) {
-			$response->addTo('sparkMsg', 'No permission to lock tickets of this type.');
-			$this->presenter = 'redirect';
-			$response->url = m_appurl('cportal','ticket','view',
+			$response->addUserMessage('No permission to lock tickets of this type.', 'error');
+			$response->redir = m_appurl('cportal','ticket','view',
 				array('id'=>$request->cleanInt('id'))
 			);
 			return false;
@@ -62,8 +61,7 @@ class Cportal_Ticket {
 		}
 
 		if ($this->ticketFinderService->is_locked == 1 && $this->ticketFinderService->owner_id != $u->userId) {
-			$response->addTo('sparkMsg', 'Ticket #'.$this->ticketFinderService->csrv_ticket_id.' is locked.');
-//			$response->redir = 'redirect';
+			$response->addUserMessage('Ticket #'.$this->ticketFinderService->csrv_ticket_id.' is locked.', 'warn');
 			$response->redir = m_appurl('cportal/ticket/viewlock',
 				array('id'=>$request->cleanInt('id'))
 			);
@@ -122,7 +120,8 @@ class Cportal_Ticket {
 		$ticket = new Metrodb_Dataitem('csrv_ticket');
 		$ticket->load($request->cleanInt('id'));
 		if ($ticket->_isNew) {
-			trigger_error('cannot find ticket id #'.$request->cleanInt('id'));
+			$response->addUserMessage('No ticket with requested ID', 'error');
+//			trigger_error('cannot find ticket id #'.$request->cleanInt('id'));
 			return false;
 		}
 
@@ -174,7 +173,7 @@ class Cportal_Ticket {
 		$u = $request->getUser();
 
 		if ($ticket->_isNew) {
-			$response->addTo('sparkMsg', array('msg'=>'Lost Ticket ID', 'type'=>'warn'));
+			$response->addUserMessage( 'Lost Ticket ID', 'warn');
 //			$u->addSessionMessage('Lost Ticket ID');
 			$response->redir = m_appurl('');
 			return false;
@@ -249,7 +248,7 @@ class Cportal_Ticket {
 		$comment->author         = $request->getUser()->username;
 		$comment->save();
 
-		$response->addTo('sparkMsg', array('msg'=>'Note added to ticket #'.$ticket->csrv_ticket_id));
+		$response->addUserMessage('Note added to ticket #'.$ticket->csrv_ticket_id);
 
 		$response->redir = m_appurl('cportal/ticket/edit', array('id'=>$ticket->csrv_ticket_id));
 	}
@@ -260,7 +259,7 @@ class Cportal_Ticket {
 		$id = $request->cleanInt('id');
 		$u = $request->getUser();
 		if ($id < 1) {
-			$response->addTo('sparkMsg', array('msg'=>'No ID sent, somethign is broken. #'.$ticket->csrv_ticket_id, 'type'=>'warn'));
+			$response->addUserMessage('No ID sent, somethign is broken. #'.$ticket->csrv_ticket_id, 'warn');
 			$response->redir = m_appurl('cportal');
 			return false;
 		}
@@ -268,7 +267,7 @@ class Cportal_Ticket {
 		$ticket->load($request->cleanInt('id'));
 		$statusId = $request->cleanInt('status_id');
 		if ($statusId === 0 ) {
-			$response->addTo('sparkMsg', array('msg'=>'No valid status chosen.', 'type'=>'warn'));
+			$response->addUserMessage('No valid status chosen.', 'warn');
 			$response->redir = m_appurl('cportal/ticket/edit', array('id'=>$id));
 			return false;
 		}
@@ -278,7 +277,7 @@ class Cportal_Ticket {
 		$ticket->csrv_ticket_status_id = $statusId;
 		$ticket->save();
 
-		$response->addTo('sparkMsg', array('msg'=>'Status changed: Ticket #'.$ticket->csrv_ticket_id, 'type'=>'success'));
+		$response->addUserMessage('Status changed: Ticket #'.$ticket->csrv_ticket_id, 'success');
 
 		//log it
 		$status = new Metrodb_Dataitem('csrv_ticket_status');
@@ -358,7 +357,7 @@ class Cportal_Ticket {
 			if (count($ids) > 0) {
 				$ticketsLoader->andWhere('csrv_ticket_id',  $ids, 'IN');
 			} else {
-				$response->addTo('sparkMsg','No Results.');
+				$response->addUserMessage('No Results.');
 				$response->searchCrit = array(
 					'total_rec'=>0,
 					'rpp'=>$this->rpp,
@@ -459,7 +458,7 @@ class Cportal_Ticket {
 		if ($response->finalStatusId === 0 ) {
 			//$u = $request->getUser();
 			//$u->addSessionMessage('Not a valid status.');
-			$response->addTo('sparkMsg', 'Not a valid status.');
+			$response->addUserMessage('Not a valid status.');
 			$this->presenter = 'redirect';
 			$response->redir = m_appurl('cportal/ticket/edit', array('id'=>$request->cleanInt('id')));
 			return false;
@@ -494,7 +493,7 @@ class Cportal_Ticket {
 		$u = $request->getUser();
 		if ($id < 1) {
 			//$u->addSessionMessage('Note added to ticket #'.$ticket->csrv_ticket_id);
-			$response->addTo('sparkMsg', array('message'=>'Note added to ticket #'.$ticket->csrv_ticket_id, 'type'=>'info'));
+			$response->addUserMessage('Note added to ticket #'.$ticket->csrv_ticket_id, 'info');
 			$response->redir = m_appurl('cportal');
 			return false;
 		}
@@ -538,7 +537,7 @@ class Cportal_Ticket {
 		}
 
 		$u = $request->getUser();
-		$response->addTo('sparkMsg', 'Ticket Closed: #'.$ticket->csrv_ticket_id);
+		$response->addUserMessage('Ticket Closed: #'.$ticket->csrv_ticket_id);
 
 		$response->redir = m_appurl('');
 	}
