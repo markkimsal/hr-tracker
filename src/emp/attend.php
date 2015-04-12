@@ -431,8 +431,8 @@ class Emp_Attend {
 			return;
 		}
 		$ticketModel = _makeNew('ticket_model');
-		$attend    = Workflow_Ticketmodel::ticketFactory($ticket);
-		$oldValue  = $attend->stageItem->get($field);
+		$attend      = Workflow_Ticketmodel::ticketFactory($ticket);
+		$oldValue    = $attend->stageItem->get($field);
 
 		$attend->stageItem->set($field, $attValue);
 		$attend->stageItem->save();
@@ -441,26 +441,27 @@ class Emp_Attend {
 		$response->result = 'good';
 	}
 
-	public function updateDescAction($req, &$t) {
-		$u = $req->getUser();
+	public function updateDescAction($request, $response) {
+		$u = $request->getUser();
 
 		$allowed = FALSE;
 
-		$ticketId = $req->cleanInt('csrv_ticket_id');
-		$newValue  = $req->cleanString('newvalue');
-		$ticket = new Cportal_Ticket_Model();
+		$ticketId = $request->cleanInt('pk');
+		$newValue  = $request->cleanString('value');
+		$ticket = _makeNew('dataitem', 'csrv_ticket');
 		if (!$ticket->load($ticketId)) {
-			$t->result = 'error';
-			$t->error_code = 401;
+			$response->result = 'error';
+			$response->error_code = 401;
 			return;
 		}
-		$attend  = Cportal_Ticket_Model::ticketFactory($ticket);
-		$oldType = $attend->stageItem->get('description');
+		$ticketModel = _makeNew('ticket_model');
+		$attend      = Workflow_Ticketmodel::ticketFactory($ticket);
+		$oldValue    = $attend->stageItem->get('description');
 		$attend->stageItem->set('description', $newValue);
 		$attend->stageItem->save();
 
-		$this->_logTicketChange($ticketId, $u->userId, "description", $oldType, $attType, $u->username);
-		$t->result = 'ok';
+		$this->_logTicketChange($ticketId, $u->userId, "description", $oldValue, $newValue, $u->username);
+		$response->result = 'ok';
 	}
 
 
