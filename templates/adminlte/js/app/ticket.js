@@ -138,6 +138,7 @@ function enableEdits() {
  		$(this).editable({
 			type: 'date',
 			url: burl + $(this).data('updateaction'),
+			params: {fd: $(this).data('propdesc')},
 			pk: pk,
 			format: 'mm/dd/yyyy'
 		});
@@ -147,6 +148,7 @@ function enableEdits() {
  		$(this).editable({
 			type: 'text',
 			url: burl + $(this).data('updateaction'),
+			params: {fd: $(this).data('propdesc')},
 			pk: pk,
 			format: 'mm/dd/yyyy'
 		});
@@ -157,6 +159,7 @@ function enableEdits() {
 			type: 'select',
 			url: burl + $(this).data('updateaction'),
 			source: burl + $(this).data('sourceurl'),
+			params: {fd: $(this).data('propdesc')},
 			pk: pk,
 			format: 'mm/dd/yyyy'
 		});
@@ -167,6 +170,7 @@ function enableEdits() {
 			type: 'textarea',
 			url: burl + $(this).data('updateaction'),
 			source: burl + $(this).data('sourceurl'),
+			params: {fd: $(this).data('propdesc')},
 			mode: 'inline',
 			pk: pk
 		});
