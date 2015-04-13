@@ -54,12 +54,22 @@ class Emp_Main {
 	}
 
 	/**
-	 *
+	 * Show 100 employees at a time, calculate attendance points based off a rolling 365 cut off date
+	 * and calculate vacation hours based off the employee's hire date.
 	 */
 	public function mainAction($request, $response) {
 		$finder = _makeNew('dataitem', 'employee');
 		$finder->_cols = array('employee.*', 'T0.*', 
-			'SUM( case WHEN DATE_SUB(CURDATE(), INTERVAL 365 DAY) < incident_date then `points` else NULL end) as points');
+			'SUM( case WHEN DATE_SUB(CURDATE(), INTERVAL 365 DAY) < incident_date then `points` else NULL end) as points',
+			'SUM( case
+                 WHEN DAYOFYEAR(`hire_date`) - DAYOFYEAR(CURDATE()) <  0
+                 AND DATE_SUB(incident_date, INTERVAL (DAYOFYEAR(`hire_date`) - DAYOFYEAR(CURDATE())) DAY) >= CURDATE()
+                 THEN `vac_hr`
+                 WHEN DAYOFYEAR(`hire_date`) - DAYOFYEAR(CURDATE()) >= 0
+                 AND DATE_SUB(incident_date, INTERVAL (365 + (DAYOFYEAR(`hire_date`) - DAYOFYEAR(CURDATE())) ) DAY) >= CURDATE()
+                 THEN `vac_hr`
+                 ELSE NULL end) as vac_hr'
+		);
 		$finder->hasOne('user_account', 'user_account_id', 'user_account_id', 'T0');
 		$finder->hasOne('emp_att', 'emp_id', 'employee_id', 'T1');
 		$finder->andWhere('emp_status', 'active');

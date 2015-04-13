@@ -128,7 +128,7 @@ $selectUrl = m_appurl('emp',$response->searchCrit);
 			//echo "<td $tdClass>".Emp_Main::formatDate($ticketObj->hire_date)."</td>";
 			echo "<td $tdClass>".Emp_Main::formatDate($ticketObj->hire_date)."</td>";
 			echo "<td $tdClass>".$ticketObj->points."</td>";
-			echo "<td $tdClass>".$ticketObj->vac_hr_total."</td>";
+			echo "<td $tdClass>".$ticketObj->vac_hr."</td>";
 //			echo "<td $tdClass>".Emp_Main::formatTime($ticketObj->created_on)."</td>";
 //			echo "<td $tdClass style=\"line-height:1em;\"><font size=\"+1\" style=\"color:#".$response->types[$ticketObj->csrv_ticket_type_id]->hex_color.";\">&bull;</font>".$response->types[$ticketObj->csrv_ticket_type_id]->abbrv."</td>";
 

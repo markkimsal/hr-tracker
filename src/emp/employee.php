@@ -164,8 +164,9 @@ class Emp_Employee extends Metrodb_Datamodel {
 		$finder->andWhere('emp_att.emp_id', $this->get('employee_id'));
 		$finder->hasOne('employee', 'employee_id', 'emp_id', 'T0');
 		$finder->andWhere('incident_date', 'MAKEDATE('.$anniversaryYear.', DAYOFYEAR(T0.`hire_date`))', '>', false);
-		$finder->andWhere('incident_date', 'MAKEDATE('.$anniversaryYear.'+1, DAYOFYEAR(T0.`hire_date`))', '<', false);
-//		$finder->echoSelect();
+		$finder->andWhere('incident_date', 'MAKEDATE('.$anniversaryYear.'+1, DAYOFYEAR(T0.`hire_date`))', '<=', false);
+//echo		$finder->echoSelect();
+//exit();
 //		$finder->sort('incident_date');
 		$finder->_rsltByPkey = false;
 		$listVacation = $finder->findAsArray();
