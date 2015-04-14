@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://pbo.dev.local/" />
+<title>change_attendance</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">change_attendance</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//table[@id='data-table-01']/tbody/tr/td[7]/div/a[2]/i</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=bootbox-status</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=status_id</td>
+	<td>label=Needs Attention</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=submit_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=link-comments</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=link-status</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=#ticket-status-log &gt; li</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=div.well.pull-left</td>
+	<td>Status Needs Attention</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>*Needs Attention*</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=ieihr</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=input.form-control.input-sm</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>css=input.form-control.input-sm</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@type='submit']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementNotPresent</td>
+	<td>css=div.popover-content</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>id=ieihr</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=link-comments</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=link-status</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=#ticket-status-log &gt; li</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>*Vacation Hours from *6*</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
