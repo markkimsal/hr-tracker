@@ -19,10 +19,8 @@ class Main_Sparkmsg {
 				$icon      = $this->getIcon($type);
 			}
 $html .= <<<EOD
-		<div class="alert alert-block alert-$className">
-			<button type="button" class="close" data-dismiss="alert">
-				<i class="icon-remove"></i>
-			</button>
+		<div class="alert alert-block alert-$className" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<i class="icon-$icon $color"></i>
 			$_msg
 		</div>
