@@ -235,14 +235,6 @@ class Emp_Main {
 	 * Show a form to make a new data item
 	 */
 	public function createAction($request, $response) {
-		//make page title 
-/*
-		$this->_makePageTitle($t);
-
-		//make toolbar
-		$this->_makeToolbar($t);
-*/
-
 		$this->_makeDataModel($request);
 
 		//make the form
@@ -290,43 +282,23 @@ class Emp_Main {
 	protected function _makeFormFields($f, $dataModel, $editMode=FALSE) {
 		$values = $dataModel->valuesAsArray();
 
-		foreach ($values as $k=>$v) {
-			//don't add the primary key if we're in edit mode
-			if ($editMode == TRUE) {
-				if ($k == 'id' || $k == $dataModel->get('_table').'_id') continue;
-			}
+		$es = $dataModel->get('emp_status');
+		$widget = new Metroform_Form_ElementSelect('emp_status', 'Status');
+		$widget->addChoice('Active', 'Active', $es == 'Active'? TRUE:FALSE);
+		$widget->addChoice('Terminated', 'Terminated', $es == 'Terminated'? TRUE:FALSE);
+		$widget->addChoice('WC Leave', 'WC Leave', $es == 'WC Leave'? TRUE:FALSE);
+		$widget->addChoice('Med Leave', 'Med Leave', $es == 'Med Leave'? TRUE:FALSE);
+		$widget->addChoice('Leave', 'Leave', $es == 'Leave'? TRUE:FALSE);
+		$widget->addChoice('Promoted', 'Promoted', $es == 'Promoted'? TRUE:FALSE);
+		$widget->addChoice('Transfered', 'Transfered', $es == 'Transfered'? TRUE:FALSE); 
+		$widget->size = 1;
+		$f->appendElement($widget, $es);
 
-			//skip common meta-data
-			if ($k == 'created_on' || $k == 'edited_on') {
-				continue;
-			}
+		$widget = new Metroform_Form_ElementInput('hire_date', 'Hire Date');
+		$widget->size = 55;
+		$f->appendElement($widget, $dataModel->get('hire_date'));
+		unset($widget);
 
-			//skip common meta-data
-			if ($k == 'group_id' || $k == 'user_account_id') {
-				continue;
-			}
-
-			if ($k == 'emp_status') {
-				$es = $dataModel->get('emp_status');
-				$widget = new Metroform_Form_ElementSelect($k);
-				$widget->addChoice('Active', 'Active', $es == 'Active'? TRUE:FALSE);
-				$widget->addChoice('Terminated', 'Terminated', $es == 'Terminated'? TRUE:FALSE);
-				$widget->addChoice('WC Leave', 'WC Leave', $es == 'WC Leave'? TRUE:FALSE);
-				$widget->addChoice('Med Leave', 'Med Leave', $es == 'Med Leave'? TRUE:FALSE);
-				$widget->addChoice('Leave', 'Leave', $es == 'Leave'? TRUE:FALSE);
-				$widget->addChoice('Promoted', 'Promoted', $es == 'Promoted'? TRUE:FALSE);
-				$widget->addChoice('Transfered', 'Transfered', $es == 'Transfered'? TRUE:FALSE); 
-				$widget->size = 1;
-				$f->appendElement($widget, $v);
-				continue;
-			}
-
-
-			$widget = new Metroform_Form_ElementInput($k);
-			$widget->size = 55;
-			$f->appendElement($widget, $v);
-			unset($widget);
-		}
 		//load account object.
 		$widget = new Metroform_Form_ElementInput('firstname', 'First name');
 		$f->appendElement($widget, $dataModel->getFirstname());
@@ -509,7 +481,6 @@ SELECT cpemp.*,T0.*
 	 */
 	public function saveAction($request, $response) {
 		$id = $request->cleanInt('id');
-
 
 		$this->_makeDataModel($request, $id);
 
