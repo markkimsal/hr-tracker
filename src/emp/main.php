@@ -244,6 +244,19 @@ class Emp_Main {
 	}
 
 	/**
+	 * Show a form to make a new data item
+	 */
+	public function editAction($request, $response) {
+		$this->_makeDataModel($request, $request->cleanInt('id'));
+
+		//make the form
+		$f = $this->_makeCreateForm($t, $this->dataModel, $request);
+		$this->_makeFormFields($f, $this->dataModel, TRUE);
+		$response->addTo('main', $f);
+	}
+
+
+	/**
 	 * Function to create a default form
 	 */
 	protected function _makeCreateForm(&$t, $dataModel, $req) {
